@@ -77,10 +77,17 @@ if (isset($_GET['id'])) {
                                     id="settings-styled-tab" data-tabs-target="#styled-settings" type="button"
                                     role="tab" aria-controls="settings" aria-selected="false">Practice Test</button>
                             </li>
+                            <li class="me-2" role="presentation">
+                                <button
+                                    class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                                    id="settings-styled-tab" data-tabs-target="#styled-notes" type="button" role="tab"
+                                    aria-controls="notes" aria-selected="false">Lesson Notes</button>
+                            </li>
 
                         </ul>
                     </div>
                     <div id="default-styled-tab-content">
+                        <!-- lessons tab -->
                         <div class="hidden p-4 rounded-lg bg-gray-100 border border-gray-300 dark:border-gray-600 dark:bg-gray-700"
                             id="styled-profile" role="tabpanel" aria-labelledby="profile-tab">
                             <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the
@@ -90,9 +97,10 @@ if (isset($_GET['id'])) {
                                 styling.
                             </p>
                         </div>
+                        <!-- videos tab -->
                         <div class="hidden p-4 rounded-lg bg-gray-100 border border-gray-300 dark:border-gray-600 dark:bg-gray-700"
                             id="styled-dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
-                            <div class="flex gap-6 h-[470px] max-h-[470px] ">
+                            <div class="flex gap-6 h-[470px] max-h-[470px]">
                                 <div class="mb-4 border-b border-gray-200 dark:border-gray-700 w-[30%] [&::-webkit-scrollbar]:w-2
                                     [&::-webkit-scrollbar-track]:rounded-full
                                     [&::-webkit-scrollbar-track]:bg-gray-100
@@ -100,97 +108,15 @@ if (isset($_GET['id'])) {
                                     [&::-webkit-scrollbar-thumb]:bg-gray-300
                                     dark:[&::-webkit-scrollbar-track]:bg-gray-700
                                     dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 overflow-y-auto">
-                                    <ul class="text-sm font-medium text-center m-4" id="default-tab"
-                                        data-tabs-toggle="#default-tab-content" role="tablist">
-                                        <li class="border border-gray-300 mb-3 rounded-lg" role="presentation">
-                                            <button class="w-full p-4 items-center" id="profile-tab"
-                                                data-tabs-target="#profile" type="button" role="tab"
-                                                aria-controls="profile" aria-selected="false">
-                                                <div class="w-full h-36 rounded-md overflow-hidden mb-2">
-                                                    <img src="images/thumb1.jpg" alt="Profile"
-                                                        class="w-full h-full object-cover">
-                                                </div>
-                                                <span class="block text-lg font-semibold text-white">Abdominal
-                                                    Hernia</span>
-                                                <span class="block text-gray-400">Description</span>
-                                            </button>
-                                        </li>
-                                        <li class="border border-gray-300 mb-3 rounded-lg" role="presentation">
-                                            <button class="w-full p-4 items-center" id="dashboard-tab"
-                                                data-tabs-target="#dashboard" type="button" role="tab"
-                                                aria-controls="dashboard" aria-selected="false">
-                                                <div class="w-full h-36 rounded-md overflow-hidden mb-2">
-                                                    <img src="images/thumb1.jpg" alt="Profile"
-                                                        class="w-full h-full object-cover">
-                                                </div>
-                                                <span>Dashboard</span>
-                                            </button>
-                                        </li>
-                                        <li class="border border-gray-300 mb-3 rounded-lg" role="presentation">
-                                            <button class="w-full p-4 items-center" id="settings-tab"
-                                                data-tabs-target="#settings" type="button" role="tab"
-                                                aria-controls="settings" aria-selected="false">
-                                                <div class="w-full h-36 rounded-md overflow-hidden mb-2">
-                                                    <img src="images/thumb1.jpg" alt="Profile"
-                                                        class="w-full h-full object-cover">
-                                                </div>
-                                                <span>Settings</span>
-                                            </button>
-                                        </li>
-                                        <li class="border border-gray-300 mb-3 rounded-lg" role="presentation">
-                                            <button class="w-full p-4 items-center" id="contacts-tab"
-                                                data-tabs-target="#contacts" type="button" role="tab"
-                                                aria-controls="contacts" aria-selected="false">
-                                                <div class="w-full h-36 rounded-md overflow-hidden mb-2">
-                                                    <img src="images/thumb1.jpg" alt="Profile"
-                                                        class="w-full h-full object-cover">
-                                                </div>
-                                                <span>Contacts</span>
-                                            </button>
-                                        </li>
+                                    <div id="videoIcons">
+                                        <ul class="text-sm font-medium text-center m-4" id="default-tab"
+                                            data-tabs-toggle="#default-tab-content" role="tablist">
 
-                                    </ul>
+                                        </ul>
+                                    </div>
                                 </div>
                                 <div id="default-tab-content" class="w-[70%]">
-                                    <div class="hidden p-1 rounded-lg bg-gray-50 dark:bg-gray-800 " id="profile"
-                                        role="tabpanel" aria-labelledby="profile-tab">
-                                        <video class="w-full rounded-lg bg-gray-50 dark:bg-gray-800" playsinline
-                                            controls controlsList="nodownload" oncontextmenu="return false;">
-                                            <source src="videos/drone.mp4" type="video/mp4">
-                                            Your browser does not support the video tag.
-                                        </video>
-                                    </div>
-                                    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="dashboard"
-                                        role="tabpanel" aria-labelledby="dashboard-tab">
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder
-                                            content
-                                            the <strong class="font-medium text-gray-800 dark:text-white">Dashboard
-                                                tab's
-                                                associated content</strong>. Clicking another tab will toggle the
-                                            visibility
-                                            of this one for the next. The tab JavaScript swaps classes to control the
-                                            content visibility and styling.</p>
-                                    </div>
-                                    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="settings"
-                                        role="tabpanel" aria-labelledby="settings-tab">
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder
-                                            content
-                                            the <strong class="font-medium text-gray-800 dark:text-white">Settings tab's
-                                                associated content</strong>. Clicking another tab will toggle the
-                                            visibility
-                                            of this one for the next. The tab JavaScript swaps classes to control the
-                                            content visibility and styling.</p>
-                                    </div>
-                                    <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="contacts"
-                                        role="tabpanel" aria-labelledby="contacts-tab">
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder
-                                            content
-                                            the <strong class="font-medium text-gray-800 dark:text-white">Contacts tab's
-                                                associated content</strong>. Clicking another tab will toggle the
-                                            visibility
-                                            of this one for the next. The tab JavaScript swaps classes to control the
-                                            content visibility and styling.</p>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -241,6 +167,15 @@ if (isset($_GET['id'])) {
                                 </div>
                             </div>
                         </div>
+                        <div class="hidden p-4 rounded-lg bg-gray-100 border border-gray-300 dark:border-gray-600 dark:bg-gray-700"
+                            id="styled-notes" role="tabpanel" aria-labelledby="notes-tab">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the
+                                <strong class="font-medium text-gray-800 dark:text-white">notes associated
+                                    content</strong>. Clicking another tab will toggle the visibility of this one for
+                                the next. The tab JavaScript swaps classes to control the content visibility and
+                                styling.
+                            </p>
+                        </div>
                     </div>
                 </main>
             </div>
@@ -252,6 +187,7 @@ if (isset($_GET['id'])) {
     <!-- 
     <script type="text/javascript" src="backend/js-functions.js"></script>-->
     <script type="text/javascript" src="backend/fetch-question.js"></script>
+    <script type="text/javascript" src="backend/fetch-videos.js"></script>
     <!-- <script type="text/javascript" src="backend/dashboardCards.js"></script> -->
 
     <?php include 'footer.php'; ?>

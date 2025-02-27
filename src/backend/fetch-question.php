@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $category = $categoryData['category'];
 
             // Step 2: Use the category to fetch questions
-            $stmt2 = $conn->prepare("SELECT * FROM questions WHERE category = ?");
+            $stmt2 = $conn->prepare("SELECT id, question, option1, option2, option3, option4, type, mark_allocated, is_attempted FROM questions WHERE category = ?");
             $stmt2->bind_param("s", $category);
             $stmt2->execute();
             $result2 = $stmt2->get_result();

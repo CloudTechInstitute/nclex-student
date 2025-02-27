@@ -1,12 +1,11 @@
 <?php include 'head.php';
 include 'backend/connection.php';
 session_start();
-if (!isset($_SESSION['LoggedUser'])) {
+if (!isset($_SESSION['LoggedStudent'])) {
     header('location:login.php');
     exit;
 } else {
-    $user = $_SESSION['LoggedUser'];
-    $role = $_SESSION['UserRole'];
+    $user = $_SESSION['LoggedStudent'];
 }
 
 ?>

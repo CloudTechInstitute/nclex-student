@@ -6,9 +6,10 @@
             <a href="index.php"
                 class="block font-semibold p-4 hover:bg-gray-300 dark:hover:bg-gray-800 rounded">Dashboard</a>
 
-            <a href="#"
+            <a href="subscriptions.php"
                 class="block font-semibold p-4 hover:bg-gray-300 dark:hover:bg-gray-800 rounded">Subscriptions</a>
-            <a href="#" class="block font-semibold p-4 hover:bg-gray-300 dark:hover:bg-gray-800 rounded">Analytics</a>
+            <a href="tutorials.php"
+                class="block font-semibold p-4 hover:bg-gray-300 dark:hover:bg-gray-800 rounded">Tutorials</a>
             <a href="#" class="block font-semibold p-4 hover:bg-gray-300 dark:hover:bg-gray-800 rounded">My Progress</a>
             <a href="#" class="block font-semibold p-4 hover:bg-gray-300 dark:hover:bg-gray-800 rounded">Quizzes</a>
             <a href="settings.php"
@@ -17,12 +18,13 @@
     </div>
     <div class="p-4 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-200 dark:bg-gray-800">
         <div class="flex justify-start gap-2 items-center mb-2">
-            <div>
-                <div class="w-5 h-5 p-5 rounded-full bg-gray-400"></div>
+            <div class="flex justify-start items-center">
+                <div class="w-10 h-10 rounded-full bg-gray-400 flex justify-center items-center">
+                    <i class="fa-solid fa-user text-white"></i>
+                </div>
             </div>
-            <div>
-                <p class="font-bold text-sm"><?php echo $user; ?></p>
-                <!-- <p class="text-xs"><?php //echo $role; ?></p> -->
+            <div class="w-full flex justify-start">
+                <p class="text-sm"><?php echo $user; ?></p>
             </div>
         </div>
         <form method="post" action="logout.php">

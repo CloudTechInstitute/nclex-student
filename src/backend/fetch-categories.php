@@ -7,12 +7,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $result = $conn->query($query);
 
     if ($result->num_rows > 0) {
-        $roles = [];
+        $categories = [];
         while ($row = $result->fetch_assoc()) {
             // Convert date format from Y-m-d to d-m-y
-            $roles[] = $row;
+            $categories[] = $row;
         }
-        echo json_encode(['status' => 'success', 'data' => $roles]);
+        echo json_encode(['status' => 'success', 'data' => $categories]);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'No categories found']);
     }

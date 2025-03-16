@@ -24,7 +24,7 @@ document
     }
 
     try {
-      let response = await fetch("backend/register.php", {
+      let response = await fetch("backend/php/register.php", {
         method: "POST",
         body: formData,
       });

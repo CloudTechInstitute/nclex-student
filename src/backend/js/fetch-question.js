@@ -14,7 +14,9 @@ async function fetchQuestions() {
   }
 
   try {
-    let response = await fetch(`backend/fetch-question.php?id=${categoryId}`);
+    let response = await fetch(
+      `backend/php/fetch-question.php?id=${categoryId}`
+    );
     let result = await response.json();
 
     if (result.status === "success" && Array.isArray(result.data)) {

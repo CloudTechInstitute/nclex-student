@@ -1,5 +1,5 @@
 <?php include 'head.php'; ?>
-<?php include 'backend/connection.php'; // Include database connection ?>
+<?php include 'backend/php/connection.php'; // Include database connection ?>
 
 <body class="">
 
@@ -116,5 +116,5 @@
         </form>
     </div>
 
-    <script type="text/javascript" src="backend/register.js"></script>
+    <script type="text/javascript" src="backend/js/register.js"></script>
     <?php include 'footer.php'; ?>

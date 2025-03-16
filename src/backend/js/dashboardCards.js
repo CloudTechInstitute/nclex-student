@@ -28,7 +28,7 @@ async function searchCategories(query) {
 
   try {
     let response = await fetch(
-      `backend/search-categories.php?query=${encodeURIComponent(query)}`
+      `backend/php/search-categories.php?query=${encodeURIComponent(query)}`
     );
     let result = await response.json();
 
@@ -57,7 +57,7 @@ async function fetchCategories() {
     </div>`;
 
   try {
-    let response = await fetch("backend/fetch-categories.php");
+    let response = await fetch("backend/php/fetch-categories.php");
     let result = await response.json();
 
     if (result.status === "success" && Array.isArray(result.data)) {

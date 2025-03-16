@@ -13,7 +13,7 @@ async function fetchVideos() {
   }
 
   try {
-    let response = await fetch(`backend/fetch-videos.php?id=${categoryId}`);
+    let response = await fetch(`backend/php/fetch-videos.php?id=${categoryId}`);
     let result = await response.json();
 
     if (result.status === "success" && Array.isArray(result.data)) {

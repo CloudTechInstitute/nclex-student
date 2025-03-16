@@ -1,5 +1,5 @@
 <?php include 'head.php';
-include 'backend/connection.php';
+include 'backend/php/connection.php';
 session_start();
 if (!isset($_SESSION['LoggedStudent'])) {
     header('location:login.php');
@@ -186,8 +186,8 @@ if (isset($_GET['id'])) {
 
     <!-- 
     <script type="text/javascript" src="backend/js-functions.js"></script>-->
-    <script type="text/javascript" src="backend/fetch-question.js"></script>
-    <script type="text/javascript" src="backend/fetch-videos.js"></script>
+    <script type="text/javascript" src="backend/js/fetch-question.js"></script>
+    <script type="text/javascript" src="backend/js/fetch-videos.js"></script>
     <!-- <script type="text/javascript" src="backend/dashboardCards.js"></script> -->
 
     <?php include 'footer.php'; ?>

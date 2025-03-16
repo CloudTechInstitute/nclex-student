@@ -9,7 +9,7 @@ $response = array();
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Get and sanitize input
-    $email = isset($_POST['email']) ? filter_var(trim($_POST['email']), FILTER_SANITIZE_STRING) : '';
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
     $password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
     if (empty($email) || empty($password)) {

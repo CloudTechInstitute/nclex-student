@@ -18,7 +18,7 @@ document
     `;
 
     try {
-      let response = await fetch("backend/login.php", {
+      let response = await fetch("backend/php/login.php", {
         method: "POST",
         body: formData,
       });

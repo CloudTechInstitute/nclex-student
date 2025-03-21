@@ -1,0 +1,80 @@
+<?php
+include 'head.php';
+include 'backend/php/connection.php';
+session_start();
+
+if (!isset($_SESSION['LoggedStudent'])) {
+    header('location:login.php');
+    exit;
+} else {
+    $user = $_SESSION['LoggedStudent'];
+}
+
+// Split the full name into firstname and lastname
+$nameParts = explode(" ", $user);
+$firstname = $nameParts[0];
+$lastname = $nameParts[1];
+
+// Check if product ID is provided in the URL
+if (isset($_GET['product_id'])) {
+    $id = intval($_GET['product_id']); // Convert to integer to prevent SQL injection
+
+    // Prepare product SQL query to fetch data
+    $stmt = $conn->prepare("SELECT * FROM products WHERE uuid = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $product_result = $stmt->get_result();
+
+    // Prepare user SQL query to fetch student data
+    $stmt = $conn->prepare("SELECT * FROM students WHERE firstname = ? AND lastname = ?");
+    $stmt->bind_param("ss", $firstname, $lastname);
+    $stmt->execute();
+    $student_result = $stmt->get_result();
+
+    if ($product_result->num_rows > 0 && $student_result->num_rows > 0) {
+        $product = $product_result->fetch_assoc();
+        $student = $student_result->fetch_assoc();
+    } else {
+        echo "<p class='text-red-500'>No record found.</p>";
+        exit;
+    }
+
+    $stmt->close();
+    $conn->close();
+} else {
+    echo "<p class='text-red-500'>Invalid request.</p>";
+    exit;
+}
+?>
+
+
+<body class="dark:bg-gray-800 dark:text-white">
+    <div class=" flex h-screen">
+        <!-- Sidebar -->
+        <?php include 'components/sidebar.php' ?>
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col px-6">
+            <!-- Content Area -->
+            <div class="py-4 flex justify-between items-end mb-6">
+            </div>
+
+
+            <div class="[&::-webkit-scrollbar]:w-2
+                                    [&::-webkit-scrollbar-track]:rounded-full
+                                    [&::-webkit-scrollbar-track]:bg-gray-100
+                                    [&::-webkit-scrollbar-thumb]:rounded-full
+                                    [&::-webkit-scrollbar-thumb]:bg-gray-300
+                                    dark:[&::-webkit-scrollbar-track]:bg-gray-700
+                                    dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 overflow-y-auto">
+                <main class="">
+                    <?php include('components/checkout-form.php'); ?>
+                </main>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script type="text/javascript" src="backend/js/payment.js"></script>
+
+    <?php include 'footer.php'; ?>

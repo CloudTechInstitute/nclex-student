@@ -1,5 +1,5 @@
 <?php include 'head.php';
-include 'backend/connection.php';
+include 'backend/php/connection.php';
 session_start();
 if (!isset($_SESSION['LoggedStudent'])) {
     header('location:login.php');

@@ -20,7 +20,7 @@ document
     let toastType = "";
 
     try {
-      let response = await fetch("backend/create-tutorial.php", {
+      let response = await fetch("backend/php/create-tutorial.php", {
         method: "POST",
         body: formData,
       });
@@ -32,6 +32,7 @@ document
         toastType = "success";
 
         this.reset();
+        fetchTutorials();
       } else {
         throw new Error("Unable to create tutorial. Please try again.");
       }
@@ -129,7 +130,7 @@ async function searchTutorials(query) {
 
   try {
     let response = await fetch(
-      `backend/search-tutorials.php?query=${encodeURIComponent(query)}`
+      `backend/php/search-tutorials.php?query=${encodeURIComponent(query)}`
     );
     let result = await response.json();
 
@@ -146,7 +147,7 @@ async function searchTutorials(query) {
 
 async function fetchTutorials() {
   try {
-    let response = await fetch("backend/fetch-tutorials.php");
+    let response = await fetch("backend/php/fetch-tutorials.php");
     let result = await response.json();
 
     if (result.status === "success") {

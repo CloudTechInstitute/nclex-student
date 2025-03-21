@@ -2,24 +2,27 @@
     <thead class="text-xs text-white uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
         <tr>
             <th scope="col" class="px-6 py-3 font-bold uppercase">
-                Name
+                Product
             </th>
             <th scope="col" class="px-6 py-3 font-bold uppercase">
-                role
+                Amount
             </th>
             <th scope="col" class="px-6 py-3 font-bold uppercase">
-                date added
+                duration
             </th>
             <th scope="col" class="px-6 py-3 font-bold uppercase">
-                password
+                date subscribed
             </th>
             <th scope="col" class="px-6 py-3 font-bold uppercase">
-                status
+                transaction reference
+            </th>
+            <th scope="col" class="px-6 py-3 font-bold uppercase">
+                Days Left
             </th>
 
         </tr>
     </thead>
-    <tbody id="employeeTableBody">
+    <tbody id="mySubscriptionTableBody">
 
     </tbody>
 </table>

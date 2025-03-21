@@ -40,9 +40,9 @@ if (isset($_GET['id'])) {
         <div class="flex-1 flex flex-col px-6 ">
             <!-- Content Area -->
             <div class="py-4 flex justify-between items-end mb-6">
-                <p class="uppercase font-bold text-xl">dashboard</p>
+                <p class="uppercase font-bold text-xl"></p>
             </div>
-            <div class="">
+            <div class="uppercase">
                 <div><?php echo htmlspecialchars($category['category']) . ' '; ?> Category</div>
             </div>
 

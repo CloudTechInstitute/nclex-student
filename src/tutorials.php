@@ -1,5 +1,5 @@
 <?php include 'head.php';
-include 'backend/connection.php';
+include 'backend/php/connection.php';
 session_start();
 if (!isset($_SESSION['LoggedStudent'])) {
     header('location:login.php');
@@ -129,6 +129,6 @@ if (!isset($_SESSION['LoggedStudent'])) {
     </div>
 
     <!-- <script type="text/javascript" src="backend/dashboardCards.js"></script> -->
-    <script type="text/javascript" src="backend/create-tutorials.js"></script>
+    <script type="text/javascript" src="backend/js/create-tutorials.js"></script>
 
     <?php include 'footer.php'; ?>

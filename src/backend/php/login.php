@@ -30,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (password_verify($password, $user['password'])) {
             session_start();
             $_SESSION['LoggedStudent'] = $user['firstname'] . " " . $user["lastname"];
+            $_SESSION['studentID'] = $user['uuid'];
             unset($user['password']); // Remove password from response for security
 
             $response["status"] = "success";

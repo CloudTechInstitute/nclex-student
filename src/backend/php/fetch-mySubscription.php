@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                 echo json_encode(['status' => 'success', 'data' => $subscriptions]);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'No subscriptions found for this user']);
+                echo json_encode(['status' => 'error', 'message' => 'You do not have any subscription yet']);
             }
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Student not found']);

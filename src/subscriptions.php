@@ -11,7 +11,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
 ?>
 
 
-<body class="dark:bg-gray-800 dark:text-white">
+<body class="dark:bg-gray-800 bg-gray-200 dark:text-white">
     <div class=" flex h-screen">
         <!-- Sidebar -->
         <?php include 'components/sidebar.php' ?>
@@ -19,7 +19,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
         <div class="flex-1 flex flex-col">
             <!-- Content Area -->
             <div class="px-6 py-6 flex justify-between items-end mb-5">
-                <p class="uppercase font-bold text-xl">Subscriptions</p>
+                <p class="uppercase text-blue-600 font-bold text-xl">Subscriptions</p>
             </div>
             <div class="">
                 <div class="px-6 mb-5">
@@ -140,7 +140,8 @@ if (!isset($_SESSION['LoggedStudent'])) {
                                             </svg>
                                             <span
                                                 class="font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3 text-xs">
-                                                <?php echo htmlspecialchars($product['assessment']); ?> Self Assessments
+                                                <?php echo htmlspecialchars($product['assessment']); ?> Self
+                                                Assessments
                                                 Tests
                                             </span>
                                         </li>

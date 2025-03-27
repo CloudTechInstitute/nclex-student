@@ -4,6 +4,7 @@
 
         <nav class="mt-6">
             <a href="index.php" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Dashboard</a>
+            <a href="categories.php" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Lessons</a>
             <a href="my-subscriptions.php" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">My
                 Subscriptions</a>
             <a href="subscriptions.php"
@@ -11,6 +12,7 @@
             <a href="tutorials.php" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Tutorials</a>
             <a href="#" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">My Progress</a>
             <a href="#" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Quizzes</a>
+            <a href="#" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Assessments</a>
             <a href="settings.php" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Settings</a>
         </nav>
     </div>

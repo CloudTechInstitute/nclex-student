@@ -75,7 +75,7 @@ async function verifyAndSavePayment(paystackRef) {
     if (data.status === "success") {
       toastType = "success";
       toastMessage = data.message;
-      window.location.href = "subscriptions.php";
+      window.location.href = "my-subscriptions.php";
     } else {
       toastType = "error";
       toastMessage = data.message;

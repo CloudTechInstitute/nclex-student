@@ -8,12 +8,12 @@ if (!isset($_SESSION['LoggedStudent'])) {
     $user = $_SESSION['LoggedStudent'];
 }
 // Check if ID is provided in the URL
-if (isset($_GET['id'])) {
-    $id = intval($_GET['id']); // Convert to integer to prevent SQL injection
+if (isset($_GET['uuid'])) {
+    $id = $_GET['uuid']; // Convert to integer to prevent SQL injection
 
     // Prepare SQL query to fetch data
-    $stmt = $conn->prepare("SELECT * FROM categories WHERE id = ?");
-    $stmt->bind_param("i", $id);
+    $stmt = $conn->prepare("SELECT * FROM categories WHERE uuid = ?");
+    $stmt->bind_param("s", $id);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -32,7 +32,7 @@ if (isset($_GET['id'])) {
 }
 ?>
 
-<body class="dark:bg-gray-800 dark:text-white">
+<body class="dark:bg-gray-800 bg-gray-200 dark:text-white">
     <div class=" flex h-screen">
         <!-- Sidebar -->
         <?php include 'components/sidebar.php' ?>
@@ -121,52 +121,53 @@ if (isset($_GET['id'])) {
                             </div>
                         </div>
                         <!-- practice test tab -->
-                        <div class="hidden p-4 rounded-lg bg-gray-100 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 h-[520px]"
-                            id="styled-settings" role="tabpanel" aria-labelledby="settings-tab">
-                            <div class="flex gap-6 h-500px] max-h-[450px]">
-                                <div class="w-full [&::-webkit-scrollbar]:w-2
+                        <form method="post">
+                            <div class="hidden p-4 rounded-lg bg-gray-100 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 h-[520px]"
+                                id="styled-settings" role="tabpanel" aria-labelledby="settings-tab">
+                                <div class="flex gap-6 h-500px] max-h-[450px]">
+                                    <div class="w-full [&::-webkit-scrollbar]:w-2
                                     [&::-webkit-scrollbar-track]:rounded-full
                                     [&::-webkit-scrollbar-track]:bg-gray-100
                                     [&::-webkit-scrollbar-thumb]:rounded-full
                                     [&::-webkit-scrollbar-thumb]:bg-gray-300
                                     dark:[&::-webkit-scrollbar-track]:bg-gray-700
                                     dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 overflow-y-auto">
-                                    <div class="mr-2 h-[445px]" id="questionsDisplay">
+                                        <div class="mr-2 h-[445px]" id="questionsDisplay">
+                                            <!-- display fetched questions -->
+                                        </div>
+                                    </div>
 
+                                    <div class="w-full ">
+                                        <div class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-transparent dark:border-gray-600"
+                                            id="solutionBox">
+
+
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="w-full ">
-                                    <div
-                                        class="w-full p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-transparent dark:border-gray-600">
-
-                                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here is the
-                                            solution</p>
+                                <div class="flex gap-6 justify-end items-center">
+                                    <div class="flex justify-start gap-5 w-full">
+                                        <button id="prevBtn"
+                                            class="block text-white dark:text-gray-900 bg-blue-900 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-400 dark:hover:bg-green-400 dark:focus:ring-green-600"
+                                            type="button">
+                                            Previous
+                                        </button>
+                                        <button id="nextBtn"
+                                            class="block text-white dark:text-gray-900 bg-blue-900 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-400 dark:hover:bg-green-400 dark:focus:ring-green-600"
+                                            type="button">
+                                            Next
+                                        </button>
+                                    </div>
+                                    <div class="w-full">
+                                        <button id="submitBtn"
+                                            class="block text-white dark:text-gray-900 bg-blue-900 rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-400"
+                                            type="button">
+                                            Submit
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex gap-6 justify-end items-center">
-                                <div class="flex justify-start gap-5 w-full">
-                                    <button id="prevBtn"
-                                        class="block text-white dark:text-gray-900 bg-blue-900 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-400 dark:hover:bg-green-400 dark:focus:ring-green-600"
-                                        type="button">
-                                        Previous
-                                    </button>
-                                    <button id="nextBtn"
-                                        class="block text-white dark:text-gray-900 bg-blue-900 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-400 dark:hover:bg-green-400 dark:focus:ring-green-600"
-                                        type="button">
-                                        Next
-                                    </button>
-                                </div>
-                                <div class="w-full">
-                                    <button id="submitBtn"
-                                        class="block text-white dark:text-gray-900 bg-blue-900 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-400 dark:hover:bg-green-400 dark:focus:ring-green-600"
-                                        type="button">
-                                        Submit
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        </form>
                         <div class="hidden p-4 rounded-lg bg-gray-100 border border-gray-300 dark:border-gray-600 dark:bg-gray-700"
                             id="styled-notes" role="tabpanel" aria-labelledby="notes-tab">
                             <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the
@@ -183,11 +184,7 @@ if (isset($_GET['id'])) {
     </div>
     </div>
 
-
-    <!-- 
-    <script type="text/javascript" src="backend/js-functions.js"></script>-->
     <script type="text/javascript" src="backend/js/fetch-question.js"></script>
     <script type="text/javascript" src="backend/js/fetch-videos.js"></script>
-    <!-- <script type="text/javascript" src="backend/dashboardCards.js"></script> -->
 
     <?php include 'footer.php'; ?>

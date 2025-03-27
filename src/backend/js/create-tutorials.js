@@ -166,13 +166,13 @@ function displayTutorials(tutorials) {
 
   tutorials.forEach((tutorial) => {
     let card = document.createElement("a");
-    card.href = `expand.php?id=${tutorial.id}`;
+    card.href = `expand.php?uuid=${tutorial.uuid}`;
     card.className =
-      "block max-w-sm px-6 py-10 bg-blue-100 border text-center border-gray-400 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-green-700 dark:border-green-400 dark:hover:bg-green-600";
+      "block max-w-sm px-6 py-10 bg-white border text-center border-gray-400 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-green-700 dark:border-green-400 dark:hover:bg-green-600";
 
     card.innerHTML = `
-        <p class="font-normal text-lg text-gray-700 dark:text-white uppercase">${tutorial.title}</p>
-        <h5 class="mb-2 text-sm font-semibold tracking-tight text-gray-700 dark:text-white">${tutorial.description}</h5>
+        <p class="font-normal text-sm text-blue-700 dark:text-white uppercase">${tutorial.title}</p>
+        <h5 class="mb-2 text-xs font-semibold tracking-tight text-gray-700 dark:text-white">${tutorial.description}</h5>
         <p class="text-xs text-gray-500 dark:text-white">${tutorial.status}</p>
       `;
 

@@ -1,45 +1,72 @@
 <?php
-session_start(); // Start the session
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require_once __DIR__ . '/../../../vendor/autoload.php';
+
+session_start();
 include 'connection.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (isset($_SESSION['studentID']) && !empty($_SESSION['studentID']) && isset($_SESSION['LoggedStudent']) && !empty($_SESSION['LoggedStudent'])) {
-        $userID = $conn->real_escape_string($_SESSION['studentID']); // Sanitize input
-        $username = $conn->real_escape_string($_SESSION['LoggedStudent']); // Sanitize input
+    if (!empty($_SESSION['studentID']) && !empty($_SESSION['LoggedStudent'])) {
+        $userID = $conn->real_escape_string($_SESSION['studentID']);
+        $username = $conn->real_escape_string($_SESSION['LoggedStudent']);
 
-        // First, fetch the student's email using the UUID
-        $query = "SELECT email FROM students WHERE uuid = '$userID' LIMIT 1";
+        $query = "SELECT email, firstname, lastname FROM students WHERE uuid = '$userID' LIMIT 1";
         $result = $conn->query($query);
 
-        if ($result->num_rows > 0) {
+        if ($result && $result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $email = $row['email']; // Extract email
+            $email = $row['email'];
+            $fname = $row['firstname'];
+            $lname = $row['lastname'];
 
-            // Fetch subscriptions using email and username
             $query = "SELECT * FROM subscriptions WHERE email = '$email' AND subscriber = '$username' ORDER BY ID DESC";
             $result = $conn->query($query);
 
-            if ($result->num_rows > 0) {
+            if ($result && $result->num_rows > 0) {
                 $subscriptions = [];
-                $today = date("Y-m-d"); // Get today's date
+                $today = date("Y-m-d");
 
                 while ($row = $result->fetch_assoc()) {
-                    // Convert expiry date to proper format
                     $expiryDate = date("Y-m-d", strtotime($row['expiry_date']));
                     $row['date_subscribed'] = date("d-m-Y", strtotime($row['date_subscribed']));
                     $row['expiry_date'] = date("d-m-Y", strtotime($row['expiry_date']));
 
-                    // Calculate days left
                     $expiryTimestamp = strtotime($expiryDate);
                     $todayTimestamp = strtotime($today);
                     $daysLeft = ceil(($expiryTimestamp - $todayTimestamp) / (60 * 60 * 24));
 
-                    // Prevent backdated expiry from extending validity
                     if ($daysLeft < 0) {
                         $row['status'] = "Expired";
-                    } elseif ($daysLeft === 0) {
-                        $row['status'] = "Expires Today";
+                    } elseif ($daysLeft === 4) {
+                        $mail = new PHPMailer(true);
+                        try {
+                            $mail->isSMTP();
+                            $mail->Host = 'globalnclexamscenter.com';
+                            $mail->SMTPAuth = true;
+                            $mail->Username = 'info@globalnclexamscenter.com';
+                            $mail->Password = 'Globalnclex@exams';
+                            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                            $mail->Port = 465;
+
+                            $mail->setFrom('info@globalnclexamscenter.com', 'Global NCLEX Exams Center');
+                            $mail->addAddress($email, "$fname $lname");
+
+                            $mail->isHTML(true);
+                            $mail->Subject = 'Subscription Expiry';
+                            $mail->Body = "
+                                <h2>Subscription Expiry Notice</h2>
+                                <p>Hello $fname,</p>
+                                <p>Your subscription with us has $daysLeft days left. We encourage you to renew before it expires.</p>
+                                <p>If you did not have an active subscription with us, please ignore this email.</p>
+                                <p>Kind Regards,<br>Global NCLEX Exams Center</p>
+                            ";
+                            $mail->send();
+                        } catch (Exception $e) {
+                            // Log error here instead of returning it
+                        }
+                        $row['status'] = "Expires in $daysLeft days";
                     } else {
                         $row['status'] = "$daysLeft days left";
                     }

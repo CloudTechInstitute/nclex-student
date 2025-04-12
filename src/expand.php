@@ -39,7 +39,7 @@ if (isset($_GET['uuid'])) {
         <!-- Main Content -->
         <div class="flex-1 flex flex-col px-6 ">
             <!-- Content Area -->
-            <div class="py-4 flex justify-between items-end mb-6">
+            <div class="py-2 flex justify-between items-end mb-6">
                 <p class="uppercase font-bold text-xl"></p>
             </div>
             <div class="uppercase">
@@ -60,11 +60,11 @@ if (isset($_GET['uuid'])) {
                             data-tabs-active-classes="text-blue-600 hover:text-blue-600 dark:text-green-500 dark:hover:text-green-500 border-blue-600 dark:border-green-500"
                             data-tabs-inactive-classes="dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300"
                             role="tablist">
-                            <li class="me-2" role="presentation">
+                            <!-- <li class="me-2" role="presentation">
                                 <button class="inline-block p-4 border-b-2 rounded-t-lg" id="profile-styled-tab"
                                     data-tabs-target="#styled-profile" type="button" role="tab" aria-controls="profile"
                                     aria-selected="false">Lessons (20)</button>
-                            </li>
+                            </li> -->
                             <li class="me-2" role="presentation">
                                 <button
                                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
@@ -88,7 +88,7 @@ if (isset($_GET['uuid'])) {
                     </div>
                     <div id="default-styled-tab-content">
                         <!-- lessons tab -->
-                        <div class="hidden p-4 rounded-lg bg-gray-100 border border-gray-300 dark:border-gray-600 dark:bg-gray-700"
+                        <!-- <div class="hidden p-4 rounded-lg bg-gray-100 border border-gray-300 dark:border-gray-600 dark:bg-gray-700"
                             id="styled-profile" role="tabpanel" aria-labelledby="profile-tab">
                             <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the
                                 <strong class="font-medium text-gray-800 dark:text-white">Profile tab's associated
@@ -96,29 +96,48 @@ if (isset($_GET['uuid'])) {
                                 the next. The tab JavaScript swaps classes to control the content visibility and
                                 styling.
                             </p>
-                        </div>
+                        </div> -->
                         <!-- videos tab -->
                         <div class="hidden p-4 rounded-lg bg-gray-100 border border-gray-300 dark:border-gray-600 dark:bg-gray-700"
                             id="styled-dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
-                            <div class="flex gap-6 h-[470px] max-h-[470px]">
-                                <div class="mb-4 border-b border-gray-200 dark:border-gray-700 w-[30%] [&::-webkit-scrollbar]:w-2
+                            <div class="">
+                                <div class="flex gap-6 h-[470px] max-h-[470px]">
+                                    <div class="border-b border-gray-200 dark:border-gray-700 w-[30%] [&::-webkit-scrollbar]:w-2
                                     [&::-webkit-scrollbar-track]:rounded-full
                                     [&::-webkit-scrollbar-track]:bg-gray-100
                                     [&::-webkit-scrollbar-thumb]:rounded-full
                                     [&::-webkit-scrollbar-thumb]:bg-gray-300
                                     dark:[&::-webkit-scrollbar-track]:bg-gray-700
                                     dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 overflow-y-auto">
-                                    <div id="videoIcons">
-                                        <ul class="text-sm font-medium text-center m-4" id="default-tab"
-                                            data-tabs-toggle="#default-tab-content" role="tablist">
+                                        <div id="videoIcons">
+                                            <ul class="text-sm font-medium text-center m-4" id="default-tab"
+                                                data-tabs-toggle="#default-tab-content" role="tablist">
 
-                                        </ul>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div id="default-tab-content" class="w-[70%]">
+
                                     </div>
                                 </div>
-                                <div id="default-tab-content" class="w-[70%]">
-
+                                <div class="p-2">
+                                    <form method="post" id="notesForm">
+                                        <label for="notes"
+                                            class="block text-sm font-medium text-gray-600 dark:text-gray-400">Leave
+                                            notes here for later</label>
+                                        <div class="flex gap-4 items-center">
+                                            <input type="text" id="notes" name="notes" required
+                                                class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm dark:border-gray-600 dark:bg-gray-700">
+                                            <button id="notesBtn"
+                                                class="block text-white w-36 dark:text-gray-900 bg-blue-900 rounded-lg text-sm py-2 px-3 text-center dark:bg-green-400"
+                                                type="submit" name="notesbtn">
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
+
                         </div>
                         <!-- practice test tab -->
                         <form method="post">
@@ -170,12 +189,9 @@ if (isset($_GET['uuid'])) {
                         </form>
                         <div class="hidden p-4 rounded-lg bg-gray-100 border border-gray-300 dark:border-gray-600 dark:bg-gray-700"
                             id="styled-notes" role="tabpanel" aria-labelledby="notes-tab">
-                            <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the
-                                <strong class="font-medium text-gray-800 dark:text-white">notes associated
-                                    content</strong>. Clicking another tab will toggle the visibility of this one for
-                                the next. The tab JavaScript swaps classes to control the content visibility and
-                                styling.
-                            </p>
+                            <div id="notesDiv">
+
+                            </div>
                         </div>
                     </div>
                 </main>
@@ -186,5 +202,6 @@ if (isset($_GET['uuid'])) {
 
     <script type="text/javascript" src="backend/js/fetch-question.js"></script>
     <script type="text/javascript" src="backend/js/fetch-videos.js"></script>
+    <script type="text/javascript" src="backend/js/fetch-notes.js"></script>
 
     <?php include 'footer.php'; ?>

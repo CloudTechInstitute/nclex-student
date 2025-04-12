@@ -19,7 +19,7 @@ if (!isset($_SESSION['LoggedStudent']) || !isset($_SESSION['studentID'])) {
         <div class="flex-1 flex flex-col">
             <!-- Content Area -->
             <div class="px-6 py-6 flex justify-between items-end mb-4">
-                <p class="uppercase text-blue-600 font-bold text-xl">My subscriptions</p>
+                <p class="uppercase text-blue-600 dark:text-green-600 font-bold text-xl">My subscriptions</p>
 
             </div>
             <div class="overflow-y-auto">

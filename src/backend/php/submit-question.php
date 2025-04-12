@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode([
             'status' => 'success',
             'correct' => $isCorrect,
-            'correct_answer' => $correctAnswer,
+            'answer' => $correctAnswer,
             'solution' => $solution,
             'selected_answer' => $submittedAnswer
         ]);

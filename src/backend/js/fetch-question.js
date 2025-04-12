@@ -111,11 +111,19 @@ function displayQuestion(index) {
     const selectedAnswer = question.selected_option || "Not available";
 
     solutionCard.innerHTML = `
-      <p><strong>Your Answer:</strong> <span class="${
-        selectedAnswer === correctAnswer ? "text-green-600" : "text-red-600"
-      }">${selectedAnswer}</span></p>
-      <p><strong>Correct Answer:</strong> ${correctAnswer}</p>
-      <p><strong>Solution:</strong> ${question.solution}</p>
+      ${
+        selectedAnswer === correctAnswer
+          ? "<span class='bg-green-200 text-green-800 text-sm font-medium me-2 px-2.5 py-1 rounded-sm dark:bg-green-900 dark:text-green-300'>Correct answer chosen</span>"
+          : "<span class='bg-red-200 text-red-800 text-sm font-medium me-2 px-2.5 py-1 rounded-sm dark:bg-red-900 dark:text-red-300'>Wrong answer chosen</span>"
+      }
+      <hr class="my-2">
+      <p class="text-xs font-bold uppercase">Correct Answer:</p>
+      <p>${correctAnswer}</p>
+      <hr class="my-2">
+      <div class="bg-gray-100 dark:bg-gray-600 rounded-sm border border-gray-300 dark:border-gray-600 p-4">
+        <p class="font-semibold uppercase">Solution:</p>      
+        <p class=""> ${question.solution}</p>      
+      </div>
     `;
 
     solutionBox.appendChild(solutionCard);
@@ -178,29 +186,30 @@ async function submitQuiz() {
     const result = await response.json();
 
     if (result.status === "success") {
+      solutionBox.innerHTML = ""; // Clear loading spinner
       const solutionCard = document.createElement("div");
 
       solutionCard.innerHTML = `
-        <p><span class="${
-          result.correct ? "bg-green-600 p-2 rounded" : "bg-red-600 p-2 rounded"
+        <p class="mb-2"><strong>Your Answer:</strong> <span class="${
+          result.correct ? "text-green-600" : "text-red-600"
         }">${result.selected_answer}</span></p>
-        <p class="mb-2"><strong>Correct Answer:</strong> ${
-          result.correct_answer
-        }</p> 
-        <hr class="mb-2">  
-        <p><strong>Solution:</strong> ${result.solution}</p>
+        <p class="mb-2"><strong>Correct Answer:</strong> ${result.answer}</p>
+        <div class="bg-yellow-100 rounded p-2 border border-gray-500"> 
+          <p><strong>Solution:</strong></p>
+          <p>${result.solution}</p>
+        </div>
       `;
 
       // Update the current question state
       currentQuestion.attempted = true;
       currentQuestion.selected_option = result.selected_answer;
       currentQuestion.solution = result.solution;
+      currentQuestion.answer = result.answer;
+
+      solutionBox.appendChild(solutionCard);
 
       // Re-render the question to reflect updated state
       displayQuestion(currentIndex);
-
-      // Scroll to solution box after update
-      solutionBox.scrollIntoView({ behavior: "smooth" });
     } else {
       solutionBox.innerHTML = `<p class="text-red-500">${result.message}</p>`;
     }

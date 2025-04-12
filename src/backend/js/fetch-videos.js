@@ -5,7 +5,7 @@ async function fetchVideos() {
   let videoContainer = document.getElementById("default-tab-content");
 
   const urlParams = new URLSearchParams(window.location.search);
-  const categoryId = urlParams.get("id");
+  const categoryId = urlParams.get("uuid");
 
   if (!categoryId) {
     videoIcons.innerHTML = `<p class="text-white">Error: Category ID is missing.</p>`;
@@ -13,7 +13,9 @@ async function fetchVideos() {
   }
 
   try {
-    let response = await fetch(`backend/php/fetch-videos.php?id=${categoryId}`);
+    let response = await fetch(
+      `backend/php/fetch-videos.php?uuid=${categoryId}`
+    );
     let result = await response.json();
 
     if (result.status === "success" && Array.isArray(result.data)) {
@@ -66,9 +68,8 @@ function displayVideos(videos) {
       "mb-2"
     );
 
-    // Create thumbnail image (Placeholder - Replace with dynamic thumbnails if available)
     const thumbnail = document.createElement("img");
-    thumbnail.src = "images/thumb1.jpg"; // Replace with real thumbnail URL if available
+    thumbnail.src = "images/thumb1.jpg";
     thumbnail.alt = video.name;
     thumbnail.classList.add("w-full", "h-full", "object-cover");
 
@@ -77,7 +78,14 @@ function displayVideos(videos) {
 
     // Create video title
     const title = document.createElement("span");
-    title.classList.add("block", "text-lg", "font-semibold", "text-white");
+    title.classList.add(
+      "block",
+      "text-md",
+      "text-black",
+      "text-left",
+      "font-semibold",
+      "dark:text-white"
+    );
     title.innerText = video.name;
 
     // Append everything to the button

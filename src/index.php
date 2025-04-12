@@ -19,7 +19,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
         <div class="flex-1 flex flex-col px-6 ">
             <!-- Content Area -->
             <div class="py-4 flex justify-between items-end">
-                <p class="uppercase text-blue-600 font-bold text-xl">dashboard</p>
+                <p class="uppercase text-blue-600 dark:text-green-600 font-bold text-xl">dashboard</p>
             </div>
 
             <div class="overflow-y-auto">

@@ -4,12 +4,12 @@ header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Check if 'id' is provided in the URL
-    if (isset($_GET['id'])) {
-        $id = intval($_GET['id']); // Convert to integer for security
+    if (isset($_GET['uuid'])) {
+        $id = ($_GET['uuid']); // Convert to integer for security
 
         // Step 1: Fetch the category using the ID
-        $stmt = $conn->prepare("SELECT category FROM categories WHERE id = ?");
-        $stmt->bind_param("i", $id);
+        $stmt = $conn->prepare("SELECT category FROM categories WHERE uuid = ?");
+        $stmt->bind_param("s", $id);
         $stmt->execute();
         $result = $stmt->get_result();
 

@@ -11,7 +11,7 @@
                 class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Subscriptions</a>
             <a href="tutorials.php" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Tutorials</a>
             <a href="#" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">My Progress</a>
-            <a href="#" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Quizzes</a>
+            <a href="quizzes.php" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Quizzes</a>
             <a href="#" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Assessments</a>
             <a href="settings.php" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Settings</a>
         </nav>

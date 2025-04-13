@@ -1,0 +1,205 @@
+document
+  .getElementById("quizForm")
+  .addEventListener("submit", async function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    let formData = new FormData(this);
+    let topics = [];
+
+    // Get all checked checkboxes
+    document
+      .querySelectorAll("input[name='topics[]']:checked")
+      .forEach((checkbox) => {
+        topics.push(checkbox.value);
+      });
+
+    // Append topics as a single string separated by commas
+    formData.append("topics", topics.join(","));
+
+    let toastMessage = "";
+    let toastType = "";
+
+    try {
+      let response = await fetch("backend/php/create-quiz.php", {
+        method: "POST",
+        body: formData,
+      });
+
+      let result;
+      if (response.ok) {
+        result = await response.json();
+        toastMessage = result.message;
+        toastType = "success";
+
+        this.reset();
+        fetchQuiz();
+      } else {
+        throw new Error("Unable to create Quiz. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toastMessage = "Unable to create Quiz. Please try again.";
+      toastType = "error";
+    }
+
+    // Close the modal
+    let modal = document.getElementById("quiz-modal");
+    if (modal) {
+      modal.classList.add("hidden");
+      modal.setAttribute("aria-hidden", "true"); // Accessibility
+    }
+
+    // Simulate clicking the toggle button (if available)
+    let modalToggle = document.querySelector(
+      "[data-modal-toggle='quiz-modal']"
+    );
+    if (modalToggle) {
+      modalToggle.click();
+    }
+
+    // Remove backdrop if still present
+    let backdrop = document.querySelector(
+      ".fixed.inset-0.bg-black.bg-opacity-50"
+    );
+    if (backdrop) {
+      backdrop.remove();
+    }
+
+    // Restore scrolling to the body
+    document.body.classList.remove("overflow-hidden");
+
+    // Create toast notification dynamically
+    let toast = document.createElement("div");
+    toast.className =
+      "flex items-center w-full max-w-sm p-4 mb-4 text-gray-500 bg-gray-100 rounded-lg shadow-lg dark:text-gray-400 dark:bg-gray-700 fixed top-5 left-1/2 -translate-x-1/2";
+
+    let iconColor =
+      toastType === "success"
+        ? "text-green-500 bg-green-100 dark:bg-green-800 dark:text-green-200"
+        : "text-red-500 bg-red-100 dark:bg-red-800 dark:text-red-200";
+
+    toast.innerHTML = `
+      <div class="inline-flex items-center justify-center shrink-0 w-8 h-8 ${iconColor}">
+          <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+          </svg>
+      </div>
+      <div class="ms-3 text-sm font-normal">${toastMessage}</div>
+      <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
+          onclick="this.parentElement.remove()">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+          </svg>
+      </button>
+    `;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.remove();
+    }, 3000);
+  });
+
+document
+  .getElementById("searchQuizButton")
+  .addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent form submission
+
+    let searchQuery = document.getElementById("default-search").value.trim();
+    if (searchQuery === "") {
+      fetchQuiz(); // If search is empty, fetch all Quiz
+      return;
+    }
+
+    searchQuiz(searchQuery);
+  });
+
+// Function to search Quiz
+async function searchQuiz(query) {
+  let quizDiv = document.getElementById("quizDiv");
+
+  // Show the "Searching..." skeleton UI
+  quizDiv.innerHTML = `
+    <div class="block max-w-sm p-6 bg-white border border-gray-400 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-500 dark:hover:bg-gray-700">
+        <div role="status" class="max-w-sm animate-pulse">
+            <div class="h-3 bg-gray-200 rounded-md dark:bg-green-200 w-24 mb-2"></div>
+            <div class="h-8 bg-gray-200 rounded-md dark:bg-green-200 w-16 mb-2"></div>
+            <span class="sr-only">Searching...</span>
+        </div>
+    </div>`;
+
+  try {
+    let response = await fetch(
+      `backend/php/search-quiz.php?query=${encodeURIComponent(query)}`
+    );
+    let result = await response.json();
+
+    if (result.status === "success" && Array.isArray(result.data)) {
+      displayQuiz(result.data);
+    } else {
+      quizDiv.innerHTML = `<p class="text-center text-gray-400">${result.message}</p>`;
+    }
+  } catch (error) {
+    console.error("Search error:", error);
+    quizDiv.innerHTML = `<p class="text-center text-gray-400">${error.message}</p>`;
+  }
+}
+
+async function fetchQuiz() {
+  try {
+    let response = await fetch("backend/php/fetch-quiz.php");
+    let result = await response.json();
+
+    if (result.status === "success") {
+      displayQuiz(result.data);
+    } else {
+      console.error("Failed to fetch Quiz:", result.message);
+    }
+  } catch (error) {
+    console.error("Error fetching Quiz:", error);
+  }
+}
+
+function displayQuiz(quiz) {
+  let quizDiv = document.getElementById("quizDiv");
+  quizDiv.innerHTML = ""; // Clear previous content
+
+  quiz.forEach((quiz) => {
+    let card = document.createElement("a");
+
+    card.innerHTML = `
+<div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+    <div class="flex justify-end px-4 pt-4">
+        <button id="dropdownButton" data-dropdown-toggle="dropdown" class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm p-1.5" type="button">
+            <span class="sr-only">Open dropdown</span>
+            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
+                <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/>
+            </svg>
+        </button>
+        <!-- Dropdown menu -->
+        <div id="dropdown" class="z-10 hidden text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
+            <ul class="py-2" aria-labelledby="dropdownButton">
+            <li>
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Edit</a>
+            </li>
+            <li>
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Export Data</a>
+            </li>
+            <li>
+                <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
+            </li>
+            </ul>
+        </div>
+    </div>
+    <div class="flex flex-col items-center pb-10">
+        <h5 class="mb-1 text-md font-normal text-gray-900 dark:text-white">${quiz.title}</h5>
+    </div>
+</div>
+      `;
+
+    quizDiv.appendChild(card);
+  });
+}
+
+// Call function to fetch Quiz on page load
+document.addEventListener("DOMContentLoaded", fetchQuiz);

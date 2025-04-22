@@ -3,20 +3,21 @@
         <h1 class="text-xl font-bold text-white">Global Nclex</h1>
 
         <nav class="mt-6">
-            <a href="index.php" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Dashboard</a>
-            <a href="categories.php" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Lessons</a>
-            <a href="my-subscriptions.php" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">My
+            <a href="index.php" class="block font-semibold p-3 hover:bg-gray-800 text-white rounded">Dashboard</a>
+            <a href="categories.php" class="block font-semibold p-3 hover:bg-gray-800 text-white rounded">Lessons</a>
+            <a href="my-subscriptions.php" class="block font-semibold p-3 hover:bg-gray-800 text-white rounded">My
                 Subscriptions</a>
             <a href="subscriptions.php"
-                class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Subscriptions</a>
-            <a href="tutorials.php" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Tutorials</a>
-            <a href="#" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">My Progress</a>
-            <a href="quizzes.php" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Quizzes</a>
-            <a href="#" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Assessments</a>
-            <a href="settings.php" class="block font-semibold p-4 hover:bg-gray-800 text-white rounded">Settings</a>
+                class="block font-semibold p-3 hover:bg-gray-800 text-white rounded">Subscriptions</a>
+            <a href="tutorials.php" class="block font-semibold p-3 hover:bg-gray-800 text-white rounded">Tutorials</a>
+            <a href="#" class="block font-semibold p-3 hover:bg-gray-800 text-white rounded">My Progress</a>
+            <a href="quizzes.php" class="block font-semibold p-3 hover:bg-gray-800 text-white rounded">Quizzes</a>
+            <a href="assessments.php" class="block font-semibold p-3 hover:bg-gray-800 text-white rounded">Assessments /
+                Tests</a>
+            <a href="settings.php" class="block font-semibold p-3 hover:bg-gray-800 text-white rounded">Settings</a>
         </nav>
     </div>
-    <div class="p-4 border border-gray-700 rounded-lg bg-gray-800">
+    <div class="p-3 border border-gray-700 rounded-lg bg-gray-800">
         <div class="flex justify-start gap-2 items-center mb-2">
             <div class="flex justify-start items-center">
                 <div class="w-10 h-10 rounded-full bg-gray-400 flex justify-center items-center">

@@ -12,12 +12,13 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit();
 }
 
-// Get form data
+
 $subscriber = $_POST['name'];
 $email = $_POST['email'];
 $phone = $_POST['phone'];
 $amount = $_POST['amount'];
-$product = $_POST['product']; // Adjust field names
+$product = $_POST['product'];
+$productUUID = $_POST['product_id'];
 $duration = $_POST['duration'];
 $paystackRef = $_POST['paystack_ref'];
 $plan = $_POST['plans'];
@@ -42,7 +43,7 @@ $paystackResponse = json_decode($response, true);
 
 if ($paystackResponse['status'] && $paystackResponse['data']['status'] == "success") {
     // Insert data into database
-    $query = "INSERT INTO `subscriptions`(`subscriber`, `email`, `phone`, `product`, `amount`, `duration`, `date_subscribed`, `expiry_date`, `subscription_id`, `reference`, `plan`) VALUES ('$subscriber', '$email', '$phone', '$product', '$amount', '$duration', '$date', '$expiryDate', '$subscriptionUUID', '$paystackRef', '$plan')";
+    $query = "INSERT INTO subscriptions(subscriber, email, phone, product_uuid, product, amount, duration, date_subscribed, expiry_date, subscription_id, reference, plan) VALUES ('$subscriber', '$email', '$phone', '$productUUID', '$product', '$amount', '$duration', '$date', '$expiryDate', '$subscriptionUUID', '$paystackRef', '$plan')";
 
     if (mysqli_query($conn, $query)) {
         echo json_encode(["status" => "success", "message" => "Payment processed successfully"]);

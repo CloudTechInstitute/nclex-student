@@ -50,12 +50,12 @@ function displaySpeedTest(questions) {
       .join("");
 
     quizContainer.innerHTML = `
-      <div class="dark:bg-gray-900 p-4 rounded-lg shadow border border-gray-700 space-y-4">
-        <div class="text-green-600 text-sm">Question ${index + 1} of ${
-      questions.length
-    }</div>
+      <div class="dark:bg-gray-900 p-4 rounded-lg bg-white shadow border border-gray-300 dark:border-gray-700 space-y-4">
+        <div class="text-blue-600 dark:text-green-600 text-sm">Question ${
+          index + 1
+        } of ${questions.length}</div>
         <hr />
-        <div class="text-white text-base">${question.question}</div>
+        <div class="dark:text-white text-base">${question.question}</div>
         <form id="questionForm" class="flex flex-col space-y-3">
           ${optionsHTML}
         </form>
@@ -122,7 +122,7 @@ function displayResults() {
   const percentage = ((correctCount / total) * 100).toFixed(0);
 
   quizContainer.innerHTML = `
-      <div class="dark:bg-gray-900 p-6 rounded-lg shadow text-white text-center space-y-4">
+      <div class="bg-white dark:bg-gray-900 p-6 rounded-lg dark:text-white text-center space-y-4">
         <h2 class="text-xl font-bold text-green-400">Quiz Completed 🎉</h2>
         <p>You got <strong>${correctCount}</strong> out of <strong>${total}</strong> correct.</p>
         <p>Your Score:</p>

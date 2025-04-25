@@ -75,5 +75,18 @@ if ($result && $result->num_rows > 0) {
         <?php include 'components/modals/tutorial-modal.php'; ?>
     </div>
 
+
+    <script>
+        const tutorialStatus = document.getElementById('tutStatus');
+        const tutscheduleFields = document.getElementById('tutscheduleFields');
+
+        tutorialStatus.addEventListener('change', function () {
+            if (this.value === 'scheduled') {
+                tutscheduleFields.classList.remove('hidden');
+            } else {
+                tutscheduleFields.classList.add('hidden');
+            }
+        });
+    </script>
     <script type="text/javascript" src="backend/js/create-tutorials.js"></script>
     <?php include 'footer.php'; ?>

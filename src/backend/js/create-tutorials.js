@@ -166,14 +166,26 @@ function displayTutorials(tutorials) {
 
   tutorials.forEach((tutorial) => {
     let card = document.createElement("a");
-    card.href = `expand.php?uuid=${tutorial.uuid}`;
+    card.href = `tutorial-expand.php?uuid=${tutorial.uuid}`;
     card.className =
-      "block max-w-sm px-6 py-10 bg-white border text-center border-gray-400 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-green-700 dark:border-green-400 dark:hover:bg-green-600";
+      "relative block max-w-sm px-6 py-10 bg-white border text-center border-gray-400 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-green-700 dark:border-green-400 dark:hover:bg-green-600";
 
     card.innerHTML = `
-        <p class="font-normal text-sm text-blue-700 dark:text-white uppercase">${tutorial.title}</p>
-        <h5 class="mb-2 text-xs font-semibold tracking-tight text-gray-700 dark:text-white">${tutorial.description}</h5>
-        <p class="text-xs text-gray-500 dark:text-white">${tutorial.status}</p>
+        <p class="font-normal text-sm text-blue-700 dark:text-white uppercase">${
+          tutorial.title
+        }</p>
+        ${
+          tutorial.status === "scheduled"
+            ? `
+            <div class="absolute bottom-2 right-2 text-gray-500 dark:text-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z" />
+                </svg>
+            </div>
+        `
+            : ""
+        }
       `;
 
     tutorialsDiv.appendChild(card);

@@ -41,7 +41,7 @@ if ($result && $result->num_rows > 0) {
                     <div class="col-span-2" id="quiz-container">
 
                     </div>
-                    <div class="dark:bg-gray-900 p-4 rounded-lg shadow border border-gray-700 space-y-4"
+                    <div class="dark:bg-gray-900 bg-white p-4 rounded-lg shadow-lg border border-gray-300 dark:border-gray-700 space-y-4"
                         id="result-container"></div>
                 </main>
             </div>

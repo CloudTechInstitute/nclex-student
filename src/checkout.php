@@ -10,22 +10,20 @@ if (!isset($_SESSION['LoggedStudent'])) {
     $user = $_SESSION['LoggedStudent'];
 }
 
-// Split the full name into firstname and lastname
 $nameParts = explode(" ", $user);
 $firstname = $nameParts[0];
 $lastname = $nameParts[1];
 
-// Check if product ID is provided in the URL
 if (isset($_GET['product_id'])) {
-    $id = intval($_GET['product_id']); // Convert to integer to prevent SQL injection
+    $id = ($_GET['product_id']);
 
-    // Prepare product SQL query to fetch data
+
     $stmt = $conn->prepare("SELECT * FROM products WHERE uuid = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $product_result = $stmt->get_result();
 
-    // Prepare user SQL query to fetch student data
+
     $stmt = $conn->prepare("SELECT * FROM students WHERE firstname = ? AND lastname = ?");
     $stmt->bind_param("ss", $firstname, $lastname);
     $stmt->execute();
@@ -74,6 +72,25 @@ if (isset($_GET['product_id'])) {
     </div>
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const planSelectWrapper = document.getElementById("planSelectWrapper");
+            const radioButtons = document.querySelectorAll('input[name="plans"]');
+
+            function togglePlanSelect() {
+                const selectedPlan = document.querySelector('input[name="plans"]:checked').value;
+                planSelectWrapper.style.display = selectedPlan === "renewable" ? "block" : "none";
+            }
+
+            // Attach change event to all radio buttons
+            radioButtons.forEach(radio => {
+                radio.addEventListener("change", togglePlanSelect);
+            });
+
+            // Initial toggle on page load
+            togglePlanSelect();
+        });
+    </script>
     <script src="https://js.paystack.co/v1/inline.js"></script>
     <script type="text/javascript" src="backend/js/payment.js"></script>
 

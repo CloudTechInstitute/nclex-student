@@ -11,7 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $schedule_date = isset($_POST['quizDate']) ? trim($_POST['quizDate']) : '';
     $schedule_time = isset($_POST['quizTime']) ? trim($_POST['quizTime']) : '';
     $quizStatus = isset($_POST['quizStatus']) ? trim($_POST['quizStatus']) : '';
-    $topics = isset($_POST['topics']) ? trim($_POST['topics']) : ''; // Already a comma-separated string
+    $quizType = isset($_POST['quizType']) ? trim($_POST['quizType']) : '';
+    $quizDuration = isset($_POST['quizDuration']) ? trim($_POST['quizDuration']) : '';
+    $topics = isset($_POST['topics']) ? trim($_POST['topics']) : '';
     $date = date('Y-m-d');
     $QuizUUID = Uuid::uuid4()->toString();
     // Validate required fields
@@ -21,8 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Prepare statement to prevent SQL injection
-    $stmt = $conn->prepare("INSERT INTO quizzes (`uuid`, `title`, `topics`, `status`, `schedule_date`, `schedule_time`, `date_created`) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssssss", $QuizUUID, $title, $topics, $quizStatus, $schedule_date, $schedule_time, $date);
+    $stmt = $conn->prepare("INSERT INTO quizzes (`uuid`, `title`, `topics`, `status`, `schedule_date`, `schedule_time`, `quizType`, `quizDuration`, `date_created`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssssss", $QuizUUID, $title, $topics, $quizStatus, $schedule_date, $schedule_time, $quizType, $quizDuration, $date);
 
     if ($stmt->execute()) {
         echo json_encode(['status' => 'success', 'message' => 'Quiz created successfully']);

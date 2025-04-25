@@ -12,7 +12,10 @@
                             <input type="text" id="name" name="name"
                                 class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                                 value="<?php echo $user; ?>" required readonly />
+
                         </div>
+                        <input type="hidden" id="product_id" name="product_id"
+                            value="<?php echo $_GET['product_id']; ?>">
 
                         <div>
                             <label for="email" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
@@ -41,7 +44,7 @@
                             </div>
 
                             <div class="flex items-center mb-2">
-                                <input id="plan-option-1" type="radio" name="plans" value="once"
+                                <input id="plan-option-1" type="radio" name="plans" value="once" checked
                                     class="w-4 h-4 border-gray-300  dark:bg-gray-700 dark:border-gray-600">
                                 <label for="plan-option-1"
                                     class="block ms-2  text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -49,13 +52,24 @@
                                 </label>
                             </div>
 
-                            <div class="flex items-center">
-                                <input id="plan-option-2" type="radio" name="plans" value="renewable" checked
+                            <div class="flex items-center mb-4">
+                                <input id="plan-option-2" type="radio" name="plans" value="renewable"
                                     class="w-4 h-4 border-gray-300  dark:bg-gray-700 dark:border-gray-600">
                                 <label for="plan-option-2"
                                     class="block ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                     Renewable
                                 </label>
+                            </div>
+
+                            <div id="planSelectWrapper" class="col-span-2">
+                                <label for="quizStatus"
+                                    class="block mb-2 text-sm text-gray-900 dark:text-gray-300">Choose plan</label>
+                                <select id="quizStatus" name="quizStatus" onchange="updatePlanAmount(this.value)"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    <option hidden selected disabled>Choose one</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
                             </div>
                         </div>
 

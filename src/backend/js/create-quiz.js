@@ -166,7 +166,7 @@ function displayQuiz(quiz) {
 
   quiz.forEach((quiz) => {
     let card = document.createElement("a");
-    card.href = `expand.php?uuid=${quiz.uuid}`;
+    card.href = `quiz-expand.php?uuid=${quiz.uuid}`;
     card.innerHTML = `
     <div class="relative w-full max-w-sm bg-white border border-gray-300 rounded-lg shadow-sm dark:bg-green-600 dark:border-green-400">
     <div class="flex justify-center items-center p-10">

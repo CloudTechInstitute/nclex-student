@@ -3,34 +3,43 @@ include 'connection.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Fetch video count
+    // Fetch package count
     $packageQuery = "SELECT COUNT(*) AS package_count FROM subscriptions";
     $packageResult = $conn->query($packageQuery);
+    $packageRow = $packageResult->fetch_assoc();
+    $packageCount = $packageRow['package_count'];
 
-    // Fetch question count
-    $quizQuery = "SELECT COUNT(*) AS quiz_count FROM questions";
+    // Fetch all subscription data
+    $subscriptionDataQuery = "SELECT * FROM subscriptions";
+    $subscriptionResult = $conn->query($subscriptionDataQuery);
+    $subscriptions = [];
+    while ($row = $subscriptionResult->fetch_assoc()) {
+        $subscriptions[] = $row;
+    }
+
+    // Fetch quiz count
+    $quizQuery = "SELECT COUNT(*) AS quiz_count FROM quizzes";
     $quizResult = $conn->query($quizQuery);
+    $quizRow = $quizResult->fetch_assoc();
 
-    // Fetch ebooks count
+    // Fetch assessment (ebooks) count
     $assessmentQuery = "SELECT COUNT(*) AS assessment_count FROM ebooks";
     $assessmentResult = $conn->query($assessmentQuery);
+    $assessmentRow = $assessmentResult->fetch_assoc();
 
-    // Fetch audios count
+    // Fetch tutorial (audios) count
     $tutorialQuery = "SELECT COUNT(*) AS tutorial_count FROM tutorials";
     $tutorialResult = $conn->query($tutorialQuery);
+    $tutorialRow = $tutorialResult->fetch_assoc();
 
-    if ($packageResult && $quizResult) {
-        $packageRow = $packageResult->fetch_assoc();
-        $quizRow = $quizResult->fetch_assoc();
-        $assessmentRow = $tutorialResult->fetch_assoc();
-        $tutorialRow = $assessmentResult->fetch_assoc();
-
+    if ($packageResult && $quizResult && $assessmentResult && $tutorialResult) {
         echo json_encode([
             'status' => 'success',
-            'package_count' => $packageRow['package_count'],
+            'package_count' => $packageCount,
             'quiz_count' => $quizRow['quiz_count'],
-            'tutorial_count' => $assessmentRow['tutorial_count'],
-            'assessment_count' => $tutorialRow['assessment_count']
+            'assessment_count' => $assessmentRow['assessment_count'],
+            'tutorial_count' => $tutorialRow['tutorial_count'],
+            'subscriptions' => $subscriptions
         ]);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Failed to fetch data']);

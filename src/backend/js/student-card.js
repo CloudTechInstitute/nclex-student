@@ -14,7 +14,10 @@ async function fetchStudentStats() {
     let result = await response.json();
 
     if (result.status === "success") {
+      const firstSubscription = result.subscriptions?.[0] || {};
       displayDashboardStats(
+        firstSubscription.product || "None",
+        firstSubscription.duration || "0",
         result.package_count || 0,
         result.quiz_count || 0,
         result.assessment_count || 0,
@@ -38,6 +41,8 @@ async function fetchStudentStats() {
 }
 
 function displayDashboardStats(
+  product,
+  duration,
   packageCount,
   quizCount,
   assessmentCount,
@@ -48,12 +53,12 @@ function displayDashboardStats(
         <hr>
         <div class="flex gap-4 mt-2">
             <div class="text-center">
-                <p class=" text-sm">total</p>
-                <h5 class="mb-2 text-3xl font-semibold tracking-tight">${packageCount}</h5>
+                <p class=" text-sm">Package</p>
+                <h5 class="mb-2 text-xl font-semibold tracking-tight">${product}</h5>
             </div>
             <div class="text-center">
-                <p class=" text-sm">total</p>
-                <h5 class="mb-2 text-3xl font-semibold tracking-tight">${packageCount}</h5>
+                <p class=" text-sm">Days Left</p>
+                <h5 class="mb-2 text-3xl font-semibold tracking-tight">${duration}</h5>
             </div>
         </div>
       `;

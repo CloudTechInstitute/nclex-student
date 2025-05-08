@@ -3,7 +3,7 @@ include 'connection.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Fetch employee records
+    // Fetch questions
     $speedTestQuery = "SELECT * FROM questions ORDER BY RAND() LIMIT 3";
     $speedTestResult = $conn->query($speedTestQuery);
 

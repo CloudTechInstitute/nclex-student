@@ -42,14 +42,14 @@
                 </svg>
                 Tutorials
             </a>
-
+            <!-- 
             <a href="#" class="flex items-center font-semibold p-3 hover:bg-gray-800 text-white rounded">
                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M12 4.354a8.001 8.001 0 100 15.292 8.001 8.001 0 000-15.292zM12 8v4l3 1" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
                 My Progress
-            </a>
+            </a> -->
 
             <a href="quizzes.php" class="flex items-center font-semibold p-3 hover:bg-gray-800 text-white rounded">
                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,14 +67,14 @@
                 Assessments / Tests
             </a>
 
-            <a href="settings.php" class="flex items-center font-semibold p-3 hover:bg-gray-800 text-white rounded">
+            <!-- <a href="settings.php" class="flex items-center font-semibold p-3 hover:bg-gray-800 text-white rounded">
                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                         d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4m0 0c2.21 0 4-1.79 4-4s-1.79-4-4-4zM4 12h.01M20 12h.01M12 4v.01M12 20v.01M6.343 6.343l.01.01M17.657 17.657l.01.01M6.343 17.657l.01-.01M17.657 6.343l.01-.01"
                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
                 Settings
-            </a>
+            </a> -->
         </nav>
 
     </div>

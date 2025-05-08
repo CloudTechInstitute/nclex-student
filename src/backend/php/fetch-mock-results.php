@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $userID = $_SESSION['studentID'];
 
         // First query: Count correct answers
-        $stmt = $conn->prepare("SELECT COUNT(*) AS correct FROM attempted_quiz WHERE user_id = ? AND quiz_id = ? AND is_correct = 1");
+        $stmt = $conn->prepare("SELECT COUNT(*) AS correct FROM mock_questions WHERE user_id = ? AND mock_uuid = ? AND is_correct = 1");
         $stmt->bind_param("ss", $userID, $uuid);
 
         if ($stmt->execute()) {
@@ -19,17 +19,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $stmt->close();
 
             // Second query: Count total attempts
-            $stmt2 = $conn->prepare("SELECT COUNT(*) AS total FROM attempted_quiz WHERE user_id = ? AND quiz_id = ?");
+            $stmt2 = $conn->prepare("SELECT * FROM mock WHERE user_id = ? AND mock_uuid = ?");
             $stmt2->bind_param("ss", $userID, $uuid);
 
             if ($stmt2->execute()) {
                 $result2 = $stmt2->get_result();
                 $row2 = $result2->fetch_assoc();
-                $total = $row2['total'];
+                $total = $row2['total_questions'];
                 $stmt2->close();
 
                 // Insert into completed_quiz
-                $insert = $conn->prepare("INSERT INTO completed_quiz (quiz_id, user_id, user_score, total_questions) VALUES (?, ?, ?, ?)");
+                $insert = $conn->prepare("INSERT INTO completed_mock (mock_uuid, user_id, user_score, total_questions) VALUES (?, ?, ?, ?)");
                 $insert->bind_param("ssss", $uuid, $userID, $correct, $total);
 
                 if ($insert->execute()) {

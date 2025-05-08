@@ -7,11 +7,12 @@ if (!isset($_SESSION['LoggedStudent'])) {
 } else {
     $user = $_SESSION['LoggedStudent'];
 }
-// Check if ID is provided in the URL
-if (isset($_GET['uuid'])) {
-    $id = $_GET['uuid']; // Convert to integer to prevent SQL injection
 
-    // Prepare SQL query to fetch data
+if (isset($_GET['uuid'])) {
+    $id = $_GET['uuid'];
+    $userID = $_SESSION['studentID'];
+
+
     $stmt = $conn->prepare("SELECT * FROM quizzes WHERE uuid = ?");
     $stmt->bind_param("s", $id);
     $stmt->execute();
@@ -19,6 +20,16 @@ if (isset($_GET['uuid'])) {
 
     if ($result->num_rows > 0) {
         $category = $result->fetch_assoc();
+
+        $stmt2 = $conn->prepare("SELECT * FROM completed_quiz WHERE quiz_id = ? AND user_id = ?");
+        $stmt2->bind_param("ss", $id, $userID);
+        $stmt2->execute();
+        $result2 = $stmt2->get_result();
+        if ($result2->num_rows > 0) {
+            $quizTaken = true;
+        } else {
+            $quizTaken = false;
+        }
     } else {
         echo "<p class='text-red-500'>No record found.</p>";
         exit;
@@ -45,15 +56,13 @@ if (isset($_GET['uuid'])) {
             <div class="flex justify-between items-center">
                 <div class="uppercase"><?php echo htmlspecialchars($category['title']) . ' '; ?> </div>
                 <?php
-                if (!$category['quizDuration']) { ?>
-                    <div class="text-red-500 font-semibold text-xl">
-                        Untimed Quiz
-                    </div>
+                if ($category['quizDuration'] && $quizTaken == false) { ?>
+                <div id="countdownTimer" class="text-red-500 font-semibold text-xl"
+                    data-duration="<?php echo (int) $category['quizDuration']; ?>">
+                    Loading timer...
+                </div>
                 <?php } else { ?>
-                    <div id="countdownTimer" class="text-red-500 font-semibold text-xl"
-                        data-duration="<?php echo (int) $category['quizDuration']; ?>">
-                        Loading timer...
-                    </div>
+
                 <?php }
                 ?>
 
@@ -187,8 +196,5 @@ if (isset($_GET['uuid'])) {
     </div>
 
     <script type="text/javascript" src="backend/js/fetch-quiz-questions.js"></script>
-    <script type="text/javascript" src="backend/js/fetch-tutorial-videos.js"></script>
-    <script type="text/javascript" src="backend/js/fetch-notes.js"></script>
-    <!-- <script type="text/javascript" src="backend/js/quizCountDown.js"></script> -->
 
     <?php include 'footer.php'; ?>

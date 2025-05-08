@@ -4,15 +4,10 @@ include 'connection.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $questionId = isset($_POST['question_id']) ? trim($_POST['question_id']) : 0;
+    $questionId = isset($_POST['question_uuid']) ? trim($_POST['question_uuid']) : 0;
+    $mockId = isset($_POST['mock_uuid']) ? trim($_POST['mock_uuid']) : 0;
     $submittedAnswer = isset($_POST['answer']) ? trim($_POST['answer']) : '';
     $userId = isset($_SESSION['studentID']) ? $_SESSION['studentID'] : null;
-    $quiz_uuid = isset($_POST['quiz_id']) ? trim($_POST['quiz_id']) : null;
-
-    if (!$quiz_uuid) {
-        echo json_encode(['status' => 'error', 'message' => 'Quiz ID (uuid) is missing']);
-        exit;
-    }
 
     if ($questionId === 0 || empty($submittedAnswer) || !$userId) {
         echo json_encode(['status' => 'error', 'message' => 'Invalid input']);
@@ -35,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $isCorrect = strcasecmp($correctAnswer, $submittedAnswer) === 0;
 
         // Insert into attempted table
-        $insertStmt = $conn->prepare("INSERT INTO attempted_quiz (quiz_id, user_id, question_id, question, selected_option, is_correct) VALUES (?, ?, ?, ?, ?, ?)");
-        $insertStmt->bind_param("sssssi", $quiz_uuid, $userId, $questionUuid, $questionText, $submittedAnswer, $isCorrect);
+        $insertStmt = $conn->prepare("INSERT INTO mock_questions (mock_uuid, user_id, question_id, question, selected_option, is_correct) VALUES (?, ?, ?, ?, ?, ?)");
+        $insertStmt->bind_param("sssssi", $mockId, $userId, $questionUuid, $questionText, $submittedAnswer, $isCorrect);
         $insertStmt->execute();
         $insertStmt->close();
 

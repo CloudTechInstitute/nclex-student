@@ -131,7 +131,44 @@ function displayResults() {
     totalTimeTaken !== 1 ? "s" : ""
   }</p>
       </div>
-    `;
+  `;
+
+  // Pass the values to the submitResults function
+  submitResults(correctCount, total, percentage, totalTimeTaken);
+}
+
+async function submitResults(
+  correctCount,
+  totalQuestions,
+  percentage,
+  totalTimeTaken
+) {
+  try {
+    const payload = {
+      correctAnswers: correctCount,
+      totalQuestions: totalQuestions,
+      percentage: percentage,
+      totalTimeTaken: totalTimeTaken,
+    };
+
+    const response = await fetch("backend/php/submit-speedtest-results.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json();
+
+    if (result.status === "success") {
+      console.log("Results submitted successfully.");
+    } else {
+      console.error("Failed to submit results:", result.message);
+    }
+  } catch (error) {
+    console.error("Error submitting results:", error);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", fetchSpeedTest);

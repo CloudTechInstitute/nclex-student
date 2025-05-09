@@ -198,6 +198,7 @@ function getQueryParam(name) {
 
 async function showFinalResult(uuid) {
   try {
+    // Fetch the quiz results first
     const response = await fetch(
       `backend/php/fetch-mock-results.php?uuid=${uuid}`
     );
@@ -215,6 +216,10 @@ async function showFinalResult(uuid) {
       const formattedTime = `${minutesTaken}m ${
         secondsTaken < 10 ? "0" : ""
       }${secondsTaken}s`;
+      const percentageScore = (
+        (data.correct_answers / data.total) *
+        100
+      ).toFixed(0);
 
       if (resultDisplay) {
         resultDisplay.innerHTML = `
@@ -223,7 +228,26 @@ async function showFinalResult(uuid) {
           <p>Correct Answers: <strong>${data.correct_answers}</strong></p>
           <p>Wrong Answers: <strong>${data.wrong_answers}</strong></p>
           <p><strong>Time Taken:</strong> ${formattedTime}</p>
+          <p><strong>Percentage Score:</strong> ${percentageScore}%</p>
         `;
+      }
+
+      // Now update the time in the database (second API call)
+      const updateResponse = await fetch("backend/php/update-time.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          uuid: uuid,
+          time_taken: formattedTime,
+        }),
+      });
+
+      const updateData = await updateResponse.json();
+
+      if (updateData.status !== "success") {
+        console.error("Error updating time:", updateData.message);
       }
     } else {
       console.error("Error fetching results:", data.message);

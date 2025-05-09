@@ -19,13 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $stmt->close();
 
             // Second query: Count total attempts
-            $stmt2 = $conn->prepare("SELECT COUNT(*) AS total FROM attempted_quiz WHERE user_id = ? AND quiz_id = ?");
+            $stmt2 = $conn->prepare("SELECT number_of_questions FROM quizzes WHERE user_id = ? AND quiz_id = ?");
             $stmt2->bind_param("ss", $userID, $uuid);
 
             if ($stmt2->execute()) {
                 $result2 = $stmt2->get_result();
                 $row2 = $result2->fetch_assoc();
-                $total = $row2['total'];
+                $total = $row2['number_of_questions'];
                 $stmt2->close();
 
                 // Insert into completed_quiz

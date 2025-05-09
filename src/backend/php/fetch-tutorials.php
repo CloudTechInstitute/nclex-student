@@ -1,23 +1,40 @@
 <?php
 include 'connection.php';
+session_start();
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $query = "SELECT * FROM tutorials";
-    $result = $conn->query($query);
+    if (isset($_SESSION['studentID'])) {
+        $userId = $_SESSION['studentID'];
 
-    if ($result->num_rows > 0) {
-        $tutorials = [];
-        while ($row = $result->fetch_assoc()) {
-            // Convert date format from Y-m-d to d-m-y
-            $tutorials[] = $row;
+        $query = "SELECT * FROM tutorials WHERE user_id = ?";
+        $stmt = $conn->prepare($query);
+
+        if ($stmt) {
+            $stmt->bind_param("s", $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            $tutorials = [];
+            while ($row = $result->fetch_assoc()) {
+                $tutorials[] = $row;
+            }
+
+            if (!empty($tutorials)) {
+                echo json_encode(['status' => 'success', 'data' => $tutorials]);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'No tutorial found']);
+            }
+
+            $stmt->close();
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to prepare query']);
         }
-        echo json_encode(['status' => 'success', 'data' => $tutorials]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'No tutorial found']);
-    }
 
-    $conn->close();
+        $conn->close();
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Missing parameters']);
+    }
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }

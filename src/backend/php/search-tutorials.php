@@ -5,7 +5,7 @@ header('Content-Type: application/json');
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['query'])) {
     $searchQuery = $conn->real_escape_string($_GET['query']);
 
-    $query = "SELECT * FROM tutorials WHERE title LIKE '%$searchQuery%' OR description LIKE '%$searchQuery%'";
+    $query = "SELECT * FROM tutorials WHERE title LIKE '%$searchQuery%'";
     $result = $conn->query($query);
 
     if ($result->num_rows > 0) {

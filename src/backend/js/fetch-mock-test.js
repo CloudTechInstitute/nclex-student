@@ -2,6 +2,9 @@ let questions = [];
 let currentIndex = 0;
 let userAnswers = {};
 let mockUuid = null;
+let timerInterval;
+let quizStartTime;
+let quizEndTime;
 
 async function fetchQuestions() {
   const questionsDiv = document.getElementById("mock-container");
@@ -15,6 +18,11 @@ async function fetchQuestions() {
       mockUuid = result.mock_uuid;
       currentIndex = 0;
       displayQuestion(currentIndex);
+
+      // ✅ Start countdown timer from DB duration
+      if (result.duration) {
+        setupCountdownTimer(parseInt(result.duration));
+      }
     } else {
       questionsDiv.innerHTML = `<p class="text-red-500">${
         result.message || "Failed to load questions"
@@ -168,9 +176,11 @@ async function submitQuiz() {
 
       if (currentIndex === questions.length - 1) {
         setTimeout(() => {
-          fetchQuizResult(mockUuid);
+          quizEndTime = Date.now();
+          clearInterval(timerInterval);
+          showFinalResult(mockUuid);
           document.getElementById("submitBtn").style.display = "none";
-        }, 1000); // Optional delay to allow solution UI to update
+        }, 1000);
       }
     } else {
       solutionBox.innerHTML = `<p class="text-red-500">${result.message}</p>`;
@@ -186,7 +196,7 @@ function getQueryParam(name) {
   return urlParams.get(name);
 }
 
-async function fetchQuizResult(uuid) {
+async function showFinalResult(uuid) {
   try {
     const response = await fetch(
       `backend/php/fetch-mock-results.php?uuid=${uuid}`
@@ -195,12 +205,24 @@ async function fetchQuizResult(uuid) {
 
     if (data.status === "success") {
       const resultDisplay = document.getElementById("solutionBox");
+
+      // ✅ Calculate time taken
+      const durationInSeconds = Math.floor(
+        (quizEndTime - quizStartTime) / 1000
+      );
+      const minutesTaken = Math.floor(durationInSeconds / 60);
+      const secondsTaken = durationInSeconds % 60;
+      const formattedTime = `${minutesTaken}m ${
+        secondsTaken < 10 ? "0" : ""
+      }${secondsTaken}s`;
+
       if (resultDisplay) {
         resultDisplay.innerHTML = `
           <h3>Quiz Results</h3>
-          <p>Total Questions:<strong> ${data.total}</strong></p>
-          <p>Correct Answers:<strong> ${data.correct_answers}</strong></p>
-          <p>Wrong Answers:<strong> ${data.wrong_answers}</strong></p>
+          <p>Total Questions: <strong>${data.total}</strong></p>
+          <p>Correct Answers: <strong>${data.correct_answers}</strong></p>
+          <p>Wrong Answers: <strong>${data.wrong_answers}</strong></p>
+          <p><strong>Time Taken:</strong> ${formattedTime}</p>
         `;
       }
     } else {
@@ -213,15 +235,8 @@ async function fetchQuizResult(uuid) {
 
 function setupCountdownTimer(durationInMinutes) {
   const countdownElement = document.getElementById("countdownTimer");
-  const STORAGE_KEY = "quiz_end_time";
-  let endTime = localStorage.getItem(STORAGE_KEY);
-
-  if (!endTime) {
-    endTime = Date.now() + durationInMinutes * 60 * 1000;
-    localStorage.setItem(STORAGE_KEY, endTime);
-  } else {
-    endTime = parseInt(endTime);
-  }
+  quizStartTime = Date.now();
+  const endTime = quizStartTime + durationInMinutes * 60 * 1000;
 
   function updateCountdown() {
     const now = Date.now();
@@ -229,16 +244,15 @@ function setupCountdownTimer(durationInMinutes) {
 
     if (timeLeft <= 0) {
       countdownElement.textContent = "Time is up!";
-      localStorage.removeItem(STORAGE_KEY);
       clearInterval(timerInterval);
 
-      // Disable submission
       const submitBtn = document.getElementById("submitBtn");
       if (submitBtn) submitBtn.style.display = "none";
 
       const uuid = mockUuid || getQueryParam("uuid");
       if (uuid) {
-        fetchQuizResult(uuid);
+        quizEndTime = endTime;
+        showFinalResult(uuid);
       } else {
         console.error("UUID not found.");
       }
@@ -253,19 +267,19 @@ function setupCountdownTimer(durationInMinutes) {
   }
 
   updateCountdown();
-  const timerInterval = setInterval(updateCountdown, 1000);
+  timerInterval = setInterval(updateCountdown, 1000);
 }
 
 // Single DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
   const countdownElement = document.getElementById("countdownTimer");
   if (countdownElement) {
-    const durationInMinutes = parseInt(
-      countdownElement.getAttribute("data-duration")
-    );
-    if (!isNaN(durationInMinutes)) {
-      setupCountdownTimer(durationInMinutes);
-    }
+    // const durationInMinutes = parseInt(
+    //   countdownElement.getAttribute("data-duration")
+    // );
+    // if (!isNaN(durationInMinutes)) {
+    //   setupCountdownTimer(durationInMinutes);
+    // }
   }
 
   document.getElementById("generateBtn").addEventListener("click", () => {

@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     $stmt3->close();
                 }
 
-                echo json_encode(['status' => 'success', 'data' => $questions]);
+                echo json_encode(['status' => 'success', 'data' => $questions, 'questions_count' => count($questions)]);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'No questions found for this quiz']);
             }

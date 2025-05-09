@@ -46,13 +46,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Step 3: Store mock info
     if (count($questions) > 0) {
         $totalQuestions = count($questions);
-        $stmtMock = $conn->prepare("INSERT INTO mock (mock_uuid, user_id, total_questions, created_at) VALUES (?, ?, ?, ?)");
-        $stmtMock->bind_param("ssis", $mockUuid, $userId, $totalQuestions, $timestamp);
+        $duration = $totalQuestions;
+        $stmtMock = $conn->prepare("INSERT INTO mock (mock_uuid, user_id, total_questions, created_at, duration) VALUES (?, ?, ?, ?, ?)");
+        $stmtMock->bind_param("ssiss", $mockUuid, $userId, $totalQuestions, $timestamp, $totalQuestions);
         $stmtMock->execute();
         $stmtMock->close();
     }
 
-    echo json_encode(['status' => 'success', 'mock_uuid' => $mockUuid, 'data' => $questions]);
+    echo json_encode(['status' => 'success', 'mock_uuid' => $mockUuid, 'data' => $questions, 'duration' => $duration]);
 
     $stmt->close();
     $conn->close();

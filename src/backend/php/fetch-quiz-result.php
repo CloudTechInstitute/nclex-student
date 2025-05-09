@@ -19,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $stmt->close();
 
             // Second query: Count total attempts
-            $stmt2 = $conn->prepare("SELECT number_of_questions FROM quizzes WHERE user_id = ? AND quiz_id = ?");
-            $stmt2->bind_param("ss", $userID, $uuid);
+            $stmt2 = $conn->prepare("SELECT number_of_questions FROM quizzes WHERE uuid = ?");
+            $stmt2->bind_param("s", $uuid);
 
             if ($stmt2->execute()) {
                 $result2 = $stmt2->get_result();

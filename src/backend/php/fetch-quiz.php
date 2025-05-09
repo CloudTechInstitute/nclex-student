@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_SESSION['studentID'])) {
         $userId = $_SESSION['studentID'];
 
-        $query = "SELECT * FROM quizzes WHERE user_id = ?";
+        $query = "SELECT `uuid`, `user_id`, `title`, `topics`, `status`, `schedule_date`, `schedule_time`, `quizType`, `quizDuration`, `number_of_questions` FROM quizzes WHERE user_id = ?";
         $stmt = $conn->prepare($query);
 
         if ($stmt) {

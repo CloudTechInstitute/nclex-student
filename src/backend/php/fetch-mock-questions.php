@@ -48,16 +48,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $totalQuestions = count($questions);
         $duration = $totalQuestions;
         $stmtMock = $conn->prepare("INSERT INTO mock (mock_uuid, user_id, total_questions, created_at, duration) VALUES (?, ?, ?, ?, ?)");
-        $stmtMock->bind_param("ssiss", $mockUuid, $userId, $totalQuestions, $timestamp, $totalQuestions);
+        $stmtMock->bind_param("ssiss", $mockUuid, $userId, $totalQuestions, $timestamp, $duration);
         $stmtMock->execute();
         $stmtMock->close();
+
+
+        echo json_encode(['status' => 'success', 'mock_uuid' => $mockUuid, 'data' => $questions, 'duration' => $duration]);
+
+        $stmt->close();
+        $conn->close();
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'No unattempted questions available']);
     }
 
-    echo json_encode(['status' => 'success', 'mock_uuid' => $mockUuid, 'data' => $questions, 'duration' => $duration]);
-
-    $stmt->close();
-    $conn->close();
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
+
 ?>

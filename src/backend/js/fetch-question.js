@@ -176,6 +176,10 @@ async function submitQuiz() {
   const formData = new FormData();
   formData.append("question_id", currentQuestion.question_uuid);
   formData.append("answer", selectedAnswer);
+  formData.append(
+    "uuid",
+    new URLSearchParams(window.location.search).get("uuid")
+  );
 
   try {
     const response = await fetch("backend/php/submit-question.php", {

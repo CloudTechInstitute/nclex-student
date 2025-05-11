@@ -24,29 +24,36 @@ if (!isset($_SESSION['LoggedStudent'])) {
 
             <div class="overflow-y-auto">
                 <div class="flex gap-6 mb-4">
-                    <main class="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
+                    <main class="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
                         <?php include 'components/student-card.php'; ?>
                     </main>
+                </div>
+                <div class="flex gap-4 mb-2">
                     <div class="bg-white dark:bg-gray-700 shadow-sm rounded-lg p-4 w-full">
+                        <p class="text-xl text-blue-600 dark:text-green-600 font-bold">Quiz</p>
+                        <hr class="mb-4">
                         <?php include 'components/progress.php'; ?>
                     </div>
-                </div>
-                <div class="flex gap-4">
-                    <div class="bg-white dark:bg-gray-700 shadow-sm rounded-lg p-4 w-[70%]">
-
+                    <div class="bg-white dark:bg-gray-700 shadow-sm rounded-lg p-4 w-full">
+                        <p class="text-xl text-blue-600 dark:text-green-600 font-bold">Mock</p>
+                        <hr class="mb-4">
+                        <?php include 'components/mock-progress.php'; ?>
                     </div>
-                    <div class="bg-white dark:bg-gray-700 shadow-sm rounded-lg p-4 w-[30%]">
-
+                    <div class="bg-white dark:bg-gray-700 shadow-sm rounded-lg p-4 w-full">
+                        <p class="text-xl text-blue-600 dark:text-green-600 font-bold">Speed test</p>
+                        <hr class="mb-4">
+                        <?php include 'components/speed-progress.php'; ?>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
     </div>
 
-
-
-    <script type="text/javascript" src="backend/js/dashboardCards.js"></script>
     <script type="text/javascript" src="backend/js/student-card.js"></script>
+    <script type="text/javascript" src="backend/js/fetch-student-perfomance.js"></script>
+    <script type="text/javascript" src="backend/js/fetch-mock-performance.js"></script>
+    <script type="text/javascript" src="backend/js/fetch-speedTest-stats.js"></script>
 
     <?php include 'footer.php'; ?>

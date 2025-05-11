@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         ];
 
         // --- Pass Rate Calculation ---
-        $passRateQuery = "SELECT quiz_id, user_score, total_questions FROM completed_quiz WHERE user_id = ?";
+        $passRateQuery = "SELECT mock_uuid, user_score, total_questions FROM completed_mock WHERE user_id = ?";
         $stmt = $conn->prepare($passRateQuery);
 
         if ($stmt) {
@@ -23,10 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             $totalCorrect = 0;
             $totalQuestions = 0;
-            $quizCount = 0;
+            $mockCount = 0;
 
             while ($row = $result->fetch_assoc()) {
-                $quizCount++;
+                $mockCount++;
                 $totalCorrect += $row['user_score'];
                 $totalQuestions += $row['total_questions'];
             }
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
 
         // --- Speed Rate Calculation ---
-        $speedRateQuery = "SELECT quiz_id, time_taken, total_questions FROM completed_quiz WHERE user_id = ?";
+        $speedRateQuery = "SELECT mock_uuid, time_taken, total_questions FROM completed_mock WHERE user_id = ?";
         $stmt = $conn->prepare($speedRateQuery);
 
         if ($stmt) {
@@ -56,10 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             $totalTime = 0;
             $totalSpeed = 0;
-            $quizCount = 0;
+            $mockCount = 0;
 
             while ($row = $result->fetch_assoc()) {
-                $quizCount++;
+                $mockCount++;
                 $timeTaken = $row['time_taken'];
                 $totalQ = $row['total_questions'];
                 $timePerQuestion = $totalQ > 0 ? $timeTaken / $totalQ : 0;
@@ -68,10 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $totalSpeed += $timePerQuestion;
             }
 
-            $averageSpeed = $quizCount > 0 ? $totalSpeed / $quizCount : 0;
+            $averageSpeed = $mockCount > 0 ? $totalSpeed / $mockCount : 0;
             $criticalSpeed = $totalQuestions > 0 ? $totalTime / $totalQuestions : 0;
 
-            // Define a benchmark speed (e.g., 10 seconds/question)
             $benchmarkSpeed = 10;
             $speedPercentage = $averageSpeed > 0 ? ($benchmarkSpeed / $averageSpeed) * 100 : 0;
 
@@ -88,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
 
         // --- Competitiveness Calculation ---
-        $competitivenessQuery = "SELECT user_id, AVG(user_score / total_questions) * 100 AS average_percentage_score FROM completed_quiz GROUP BY user_id ORDER BY average_percentage_score DESC";
+        $competitivenessQuery = "SELECT user_id, AVG(user_score / total_questions) * 100 AS average_percentage_score FROM completed_mock GROUP BY user_id ORDER BY average_percentage_score DESC";
         $stmt = $conn->prepare($competitivenessQuery);
 
         if ($stmt) {
@@ -116,16 +115,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             }
 
             if ($totalParticipants === 0 || !$studentRank) {
-                // No data available
                 $response['data']['competitiveness'] = [
                     'has_data' => false,
-                    'message' => 'No quizzes taken yet. Complete a quiz to get ranked.',
-                    'rank_position' => 'take a quiz first',
+                    'message' => 'No mocks taken yet. Complete a mock to get ranked.',
+                    'rank_position' => 'take a mock first',
                     'rank_percentage' => 0,
                     'average_score' => 0
                 ];
             } else {
-                // Valid ranking data
                 $rankPercentage = (($totalParticipants - $studentRank['rank'] + 1) / $totalParticipants) * 100;
                 $rankPosition = $studentRank['rank'] . ' of ' . $totalParticipants;
 
@@ -151,4 +148,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
-?>

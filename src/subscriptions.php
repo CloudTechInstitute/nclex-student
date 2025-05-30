@@ -54,8 +54,10 @@ if (!isset($_SESSION['LoggedStudent'])) {
                                 <div
                                     class="w-full p-4 bg-white border-2 border-blue-400 rounded-lg shadow-lg sm:p-8 dark:bg-gray-700 dark:border-green-400">
                                     <form method="GET" action="checkout.php">
-                                        <input type='hidden' name='product_id'
+                                        <input type='hidden' name='product_uuid'
                                             value='<?php echo htmlspecialchars($product['uuid']); ?>' />
+                                        <input type='hidden' name='product_cost'
+                                            value='<?php echo htmlspecialchars($product['cost']); ?>' />
 
                                         <h5 class="mb-4 text-sm text-center rounded-full font-medium dark:text-green-600">
                                             <?php echo htmlspecialchars($product['name']); ?>
@@ -116,7 +118,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
                                                 </svg>
                                                 <span
                                                     class="font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3 text-xs">
-                                                    <?php echo htmlspecialchars($product['quizzes']); ?> Quizzes
+                                                    <?php //echo htmlspecialchars($product['quizzes']); ?> Quizzes
                                                 </span>
                                             </li>
                                             <li class="flex items-center">
@@ -128,7 +130,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
                                                 </svg>
                                                 <span
                                                     class="font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3 text-xs">
-                                                    <?php echo htmlspecialchars($product['speedTest']); ?> Speed Tests
+                                                    <?php //echo htmlspecialchars($product['speedTest']); ?> Speed Tests
                                                 </span>
                                             </li>
                                             <li class="flex items-center">
@@ -140,7 +142,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
                                                 </svg>
                                                 <span
                                                     class="font-normal leading-tight text-gray-500 dark:text-gray-400 ms-3 text-xs">
-                                                    <?php echo htmlspecialchars($product['assessment']); ?> Self
+                                                    <?php //echo htmlspecialchars($product['assessment']); ?> Self
                                                     Assessments
                                                     Tests
                                                 </span>

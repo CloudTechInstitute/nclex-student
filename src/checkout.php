@@ -14,12 +14,12 @@ $nameParts = explode(" ", $user);
 $firstname = $nameParts[0];
 $lastname = $nameParts[1];
 
-if (isset($_GET['product_id'])) {
-    $id = ($_GET['product_id']);
+if (isset($_GET['product_uuid'])) {
+    $id = ($_GET['product_uuid']);
 
 
     $stmt = $conn->prepare("SELECT * FROM products WHERE uuid = ?");
-    $stmt->bind_param("i", $id);
+    $stmt->bind_param("s", $id);
     $stmt->execute();
     $product_result = $stmt->get_result();
 

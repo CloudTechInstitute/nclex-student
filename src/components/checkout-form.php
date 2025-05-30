@@ -14,8 +14,8 @@
                                 value="<?php echo $user; ?>" required readonly />
 
                         </div>
-                        <input type="hidden" id="product_id" name="product_id"
-                            value="<?php echo $_GET['product_id']; ?>">
+                        <input type="hidden" id="product_uuid" name="product_uuid"
+                            value="<?php echo $_GET['product_uuid']; ?>">
 
                         <div>
                             <label for="email" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">

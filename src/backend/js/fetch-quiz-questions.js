@@ -234,6 +234,10 @@ function startCountdown() {
       localStorage.removeItem(STORAGE_KEY);
       clearInterval(countdownInterval);
       document.getElementById("submitBtn").style.display = "none";
+
+      endTime = Date.now();
+      timeUsed = Math.floor((endTime - startTime) / 1000);
+
       submitQuiz();
       const uuid = new URLSearchParams(window.location.search).get("uuid");
       if (uuid) fetchQuizResult(uuid);

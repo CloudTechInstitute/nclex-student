@@ -6,7 +6,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
     exit;
 } else {
     $user = $_SESSION['LoggedStudent'];
-    // $role = $_SESSION['UserRole'];
+    $subscription = $_SESSION['subscriptionStatus'];
 }
 
 ?>
@@ -20,6 +20,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
             <!-- Content Area -->
             <div class="py-4 flex justify-between items-end">
                 <p class="uppercase text-blue-600 dark:text-green-600 font-bold text-xl">dashboard</p>
+                <?php echo "<p class='text-sm text-gray-500 dark:text-gray-400'>Welcome, $subscription</p>"; ?>
             </div>
 
             <div class="overflow-y-auto">

@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_SESSION['studentID'])) {
         $userId = $_SESSION['studentID'];
 
-        $query = "SELECT * FROM tutorials WHERE user_id = ?";
+        $query = "SELECT * FROM tutorials WHERE user_id = ? ORDER BY id DESC";
         $stmt = $conn->prepare($query);
 
         if ($stmt) {

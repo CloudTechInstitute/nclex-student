@@ -7,6 +7,10 @@ if (!isset($_SESSION['LoggedStudent'])) {
 } else {
     $user = $_SESSION['LoggedStudent'];
     $subscription = $_SESSION['subscriptionStatus'];
+    if ($subscription == "expired" || $subscription == "no subscription") {
+        header('location:subscriptions.php');
+        exit;
+    }
 }
 
 // Fetch all topics from tutorials table

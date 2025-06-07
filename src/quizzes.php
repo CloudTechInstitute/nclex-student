@@ -7,6 +7,10 @@ if (!isset($_SESSION['LoggedStudent'])) {
 } else {
     $user = $_SESSION['LoggedStudent'];
     $subscription = $_SESSION['subscriptionStatus'];
+    if ($subscription == "expired" || $subscription == "no subscription") {
+        header('location:subscriptions.php');
+        exit;
+    }
 }
 
 // Fetch all topics from quizs table
@@ -76,16 +80,16 @@ if ($result && $result->num_rows > 0) {
         <?php include 'components/modals/quiz-modal.php'; ?>
     </div>
     <script>
-    const quizStatus = document.getElementById('quizStatus');
-    const scheduleFields = document.getElementById('quizScheduleFields');
+        const quizStatus = document.getElementById('quizStatus');
+        const scheduleFields = document.getElementById('quizScheduleFields');
 
-    quizStatus.addEventListener('change', function() {
-        if (this.value === 'scheduled') {
-            scheduleFields.classList.remove('hidden');
-        } else {
-            scheduleFields.classList.add('hidden');
-        }
-    });
+        quizStatus.addEventListener('change', function () {
+            if (this.value === 'scheduled') {
+                scheduleFields.classList.remove('hidden');
+            } else {
+                scheduleFields.classList.add('hidden');
+            }
+        });
     </script>
 
     <script type="text/javascript" src="backend/js/create-quiz.js"></script>

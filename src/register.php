@@ -1,5 +1,12 @@
-<?php include 'head.php'; ?>
-<?php include 'backend/php/connection.php'; // Include database connection ?>
+<?php include 'head.php';
+include 'backend/php/connection.php';
+session_start();
+if (isset($_SESSION['LoggedStudent'])) {
+    header('location:index.php');
+    exit;
+}
+
+?>
 
 <body class="">
 

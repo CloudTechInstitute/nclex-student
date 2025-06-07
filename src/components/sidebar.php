@@ -1,7 +1,14 @@
 <aside class="w-64 h-screen p-5 flex flex-col justify-between bg-gray-900">
 
     <div>
-        <h1 class="text-xl font-bold text-white">Global Nclex</h1>
+        <div class="flex items-center justify-start">
+            <!-- <h1 class="text-xl font-bold text-white">Global Nclex</h1> -->
+            <div class="flex justify-center w-full">
+                <!-- Dark mode logo -->
+                <img src="images/full-logo.png" alt="Dark Logo" class="w-48">
+            </div>
+
+        </div>
         <nav class="mt-6 space-y-1">
 
             <a href="index.php" class="flex items-center font-semibold p-3 hover:bg-gray-800 text-white rounded">

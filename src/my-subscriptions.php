@@ -8,6 +8,10 @@ if (!isset($_SESSION['LoggedStudent']) || !isset($_SESSION['studentID'])) {
     $user = $_SESSION['LoggedStudent'];
     $userID = $_SESSION['studentID'];
     $subscription = $_SESSION['subscriptionStatus'];
+    if ($subscription == "expired" || $subscription == "no subscription") {
+        header('location:subscriptions.php');
+        exit;
+    }
 }
 
 ?>

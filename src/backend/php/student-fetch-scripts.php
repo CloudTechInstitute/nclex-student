@@ -5,6 +5,7 @@ header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!isset($_SESSION['studentID'])) {
+        http_response_code(401); // Unauthorized
         echo json_encode(['status' => 'error', 'message' => 'User not logged in']);
         exit;
     }
@@ -78,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $tutorialRow = $tutorialResult->fetch_assoc();
     $stmt->close();
 
+    http_response_code(200); // OK
     echo json_encode([
         'status' => 'success',
         'package_count' => $packageCount,
@@ -91,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $conn->close();
 } else {
+    http_response_code(405); // Method Not Allowed
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>

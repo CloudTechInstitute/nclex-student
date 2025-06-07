@@ -3,6 +3,11 @@ include 'connection.php';
 session_start();
 header('Content-Type: application/json');
 
+function set_status($code)
+{
+    http_response_code($code);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_SESSION['studentID'])) {
         $userId = $_SESSION['studentID'];
@@ -41,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             $stmt->close();
         } else {
+            set_status(500);
             echo json_encode(['status' => 'error', 'message' => 'Failed to prepare query for Pass Rate']);
             exit;
         }
@@ -82,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             $stmt->close();
         } else {
+            set_status(500);
             echo json_encode(['status' => 'error', 'message' => 'Failed to prepare query for Speed Rate']);
             exit;
         }
@@ -136,15 +143,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             $stmt->close();
         } else {
+            set_status(500);
             echo json_encode(['status' => 'error', 'message' => 'Failed to prepare query for Competitiveness']);
             exit;
         }
 
+        set_status(200);
         echo json_encode($response);
         $conn->close();
     } else {
+        set_status(401);
         echo json_encode(['status' => 'error', 'message' => 'Student not logged in']);
     }
 } else {
+    set_status(405);
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }

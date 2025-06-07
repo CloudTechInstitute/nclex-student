@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $scheduledDateTime = new DateTime("$scheduleDate $scheduleTime");
 
                 if ($now < $scheduledDateTime) {
+                    http_response_code(403); // Forbidden
                     echo json_encode([
                         'status' => 'not_ready',
                         'message' => 'Tutorial not available yet. It will be available on ' . $scheduledDateTime->format('d-m-Y') . ' at ' . $scheduledDateTime->format('g:i A'),
@@ -33,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     exit;
                 }
             }
-
 
             // Step 3: Convert comma-separated categories into array
             $categories = array_map('trim', explode(',', $topics));
@@ -51,23 +51,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 while ($row = $result2->fetch_assoc()) {
                     $videos[] = $row;
                 }
+                http_response_code(200); // OK
                 echo json_encode(['status' => 'success', 'data' => $videos]);
             } else {
+                http_response_code(404); // Not Found
                 echo json_encode(['status' => 'error', 'message' => 'No videos found for this tutorial']);
             }
 
             $stmt2->close();
         } else {
+            http_response_code(404); // Not Found
             echo json_encode(['status' => 'error', 'message' => 'Tutorial not found']);
         }
 
         $stmt->close();
     } else {
+        http_response_code(400); // Bad Request
         echo json_encode(['status' => 'error', 'message' => 'UUID parameter is missing']);
     }
 
     $conn->close();
 } else {
+    http_response_code(405); // Method Not Allowed
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>

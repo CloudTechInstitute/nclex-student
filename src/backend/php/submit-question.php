@@ -11,6 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userId = $_SESSION['studentID'] ?? null;
 
     if (empty($questionId) || empty($submittedAnswer) || !$userId) {
+        http_response_code(400); // Bad Request
         echo json_encode(['status' => 'error', 'message' => 'Invalid input']);
         exit;
     }
@@ -36,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $insertStmt->execute();
         $insertStmt->close();
 
+        http_response_code(200); // OK
         echo json_encode([
             'status' => 'success',
             'correct' => $isCorrect,
@@ -44,12 +46,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'selected_answer' => $submittedAnswer
         ]);
     } else {
+        http_response_code(404); // Not Found
         echo json_encode(['status' => 'error', 'message' => 'Question not found']);
     }
 
     $stmt->close();
     $conn->close();
 } else {
+    http_response_code(405); // Method Not Allowed
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>

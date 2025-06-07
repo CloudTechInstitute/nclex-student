@@ -6,7 +6,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
     exit;
 } else {
     $user = $_SESSION['LoggedStudent'];
-    // $role = $_SESSION['UserRole'];
+    $subscription = $_SESSION['subscriptionStatus'];
 }
 
 ?>

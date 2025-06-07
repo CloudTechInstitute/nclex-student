@@ -6,6 +6,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
     exit;
 } else {
     $user = $_SESSION['LoggedStudent'];
+    $subscription = $_SESSION['subscriptionStatus'];
 }
 
 // Fetch all topics from quizs table

@@ -8,6 +8,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
     exit;
 } else {
     $user = $_SESSION['LoggedStudent'];
+    $subscription = $_SESSION['subscriptionStatus'];
 }
 
 $nameParts = explode(" ", $user);

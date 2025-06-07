@@ -61,14 +61,7 @@
                     </svg>
                     Assessments / Tests
                 </a>
-                <a href="subscriptions.php"
-                    class="flex items-center font-semibold p-3 hover:bg-gray-800 text-white rounded">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M7 8h10M7 12h4m1 8a9 9 0 100-18 9 9 0 000 18z" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                    Subscriptions
-                </a>
+
             <?php else: ?>
                 <!-- Links visible only to inactive or no subscription -->
                 <a href="subscriptions.php"

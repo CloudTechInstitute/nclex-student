@@ -6,6 +6,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
     exit;
 } else {
     $user = $_SESSION['LoggedStudent'];
+    $subscription = $_SESSION['subscriptionStatus'];
 }
 // Check if ID is provided in the URL
 if (isset($_GET['uuid'])) {

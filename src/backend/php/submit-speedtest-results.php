@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Validate required fields
         if ($totalQuestions <= 0 || $correctAnswers < 0 || $percentage === '' || $totalTimeTaken === '') {
+            http_response_code(400); // Bad Request
             echo json_encode(['status' => 'error', 'message' => 'Missing or invalid required fields']);
             exit;
         }
@@ -31,17 +32,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("ssiisss", $userID, $speedTestUUID, $totalQuestions, $correctAnswers, $percentage, $totalTimeTaken, $date);
 
         if ($stmt->execute()) {
+            http_response_code(201); // Created
             echo json_encode(['status' => 'success', 'message' => 'Speed test results submitted successfully']);
         } else {
+            http_response_code(500); // Internal Server Error
             echo json_encode(['status' => 'error', 'message' => 'Database error', 'error' => $stmt->error]);
         }
 
         $stmt->close();
         $conn->close();
     } else {
+        http_response_code(401); // Unauthorized
         echo json_encode(['status' => 'error', 'message' => 'User session not found']);
     }
 } else {
+    http_response_code(405); // Method Not Allowed
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>

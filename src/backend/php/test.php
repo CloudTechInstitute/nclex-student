@@ -41,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             $stmt->close();
         } else {
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'message' => 'Failed to prepare query for Pass Rate']);
             exit;
         }
@@ -83,6 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             $stmt->close();
         } else {
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'message' => 'Failed to prepare query for Speed Rate']);
             exit;
         }
@@ -139,16 +141,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             $stmt->close();
         } else {
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'message' => 'Failed to prepare query for Competitiveness']);
             exit;
         }
 
+        http_response_code(200);
         echo json_encode($response);
         $conn->close();
     } else {
+        http_response_code(401);
         echo json_encode(['status' => 'error', 'message' => 'Student not logged in']);
     }
 } else {
+    http_response_code(405);
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>

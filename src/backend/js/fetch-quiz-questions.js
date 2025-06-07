@@ -1,7 +1,7 @@
 let questions = [];
 let currentIndex = 0;
 let userAnswers = {};
-let startTime = Date.now(); // when the quiz starts
+let startTime = Date.now();
 let endTime = null;
 let timeUsed = 0;
 let countdownInterval = null;
@@ -31,7 +31,6 @@ async function fetchQuestions() {
       questionsDiv.innerHTML = `<p>${result.message}</p>`;
     }
   } catch (error) {
-    console.error("Fetch error:", error);
     questionsDiv.innerHTML = `<p class="text-red-500">Failed to load questions.</p>`;
   }
 }
@@ -63,30 +62,66 @@ function displayQuestion(index) {
 
   const optionsArray = Array.isArray(question.options)
     ? question.options
-    : question.options.split(",").map((opt) => opt.trim());
+    : question.options.split("|").map((opt) => opt.trim());
 
   optionsArray.forEach((optionText) => {
     const optionDiv = document.createElement("div");
     optionDiv.className =
       "w-full p-3 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700";
 
-    const isChecked =
-      (question.attempted && question.selected_option === optionText) ||
-      userAnswers[question.question_uuid] === optionText;
+    const inputType = question.type === "msq" ? "checkbox" : "radio";
+    const nameAttr =
+      question.type === "msq"
+        ? `question_${question.question_uuid}[]`
+        : `question_${question.question_uuid}`;
+
+    // Check if option is selected
+    let isChecked = false;
+    if (question.attempted) {
+      if (question.type === "msq" && Array.isArray(question.selected_option)) {
+        isChecked = question.selected_option.includes(optionText);
+      } else {
+        isChecked = question.selected_option === optionText;
+      }
+    } else if (
+      question.type === "msq" &&
+      Array.isArray(userAnswers[question.question_uuid])
+    ) {
+      isChecked = userAnswers[question.question_uuid].includes(optionText);
+    } else {
+      isChecked = userAnswers[question.question_uuid] === optionText;
+    }
 
     const checked = isChecked ? "checked" : "";
     const disabled = question.attempted ? "disabled" : "";
 
     optionDiv.innerHTML = `
-      <label class="flex items-center space-x-2 cursor-pointer">
-        <input type="radio" name="question_${question.question_uuid}" value="${optionText}" class="form-radio" ${checked} ${disabled}>
-        <span class="text-gray-700 dark:text-gray-300">${optionText}</span>
-      </label>
-    `;
+    <label class="flex items-center space-x-2 cursor-pointer">
+      <input type="${inputType}" name="${nameAttr}" value="${optionText}" class="form-${inputType}" ${checked} ${disabled}>
+      <span class="text-gray-700 dark:text-gray-300">${optionText}</span>
+    </label>
+  `;
 
+    // Capture answer if not attempted
     if (!question.attempted) {
-      optionDiv.querySelector("input").addEventListener("change", (e) => {
-        userAnswers[question.question_uuid] = e.target.value;
+      const input = optionDiv.querySelector("input");
+      input.addEventListener("change", (e) => {
+        const val = e.target.value;
+        const qid = question.question_uuid;
+
+        if (question.type === "msq") {
+          userAnswers[qid] = userAnswers[qid] || [];
+
+          if (e.target.checked) {
+            if (!userAnswers[qid].includes(val)) {
+              userAnswers[qid].push(val);
+            }
+          } else {
+            userAnswers[qid] = userAnswers[qid].filter((v) => v !== val);
+          }
+        } else {
+          userAnswers[qid] = val;
+        }
       });
     }
 

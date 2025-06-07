@@ -6,6 +6,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
     exit;
 } else {
     $user = $_SESSION['LoggedStudent'];
+    $subscription = $_SESSION['subscriptionStatus'];
 }
 
 if (isset($_GET['uuid'])) {
@@ -35,8 +36,6 @@ if (isset($_GET['uuid'])) {
         exit;
     }
 
-    $stmt->close();
-    $conn->close();
 } else {
     echo "<p class='text-red-500'>Invalid request.</p>";
     exit;
@@ -57,12 +56,42 @@ if (isset($_GET['uuid'])) {
                 <div class="uppercase"><?php echo htmlspecialchars($category['title']) . ' '; ?> </div>
                 <?php
                 if ($category['quizDuration'] && $quizTaken == false) { ?>
-                <div id="countdownTimer" class="text-red-500 font-semibold text-xl"
-                    data-duration="<?php echo (int) $category['quizDuration']; ?>">
-                    Loading timer...
-                </div>
+                    <div id="countdownTimer" class="text-red-500 font-semibold text-xl"
+                        data-duration="<?php echo (int) $category['quizDuration']; ?>">
+                        Loading timer...
+                    </div>
                 <?php } else { ?>
+                    <div>
+                        <span
+                            class='text-blue-800 text-sm font-medium px-2.5 py-1 rounded-sm bg-blue-400  dark:bg-green-900 dark:text-green-300'>you
+                            have taken this quiz
+                        </span>
 
+                        <p>you scored:
+                            <?php
+                            // Fetch user_score and total_questions from completed_quiz
+                            $stmt3 = $conn->prepare("SELECT user_score, total_questions FROM completed_quiz WHERE quiz_id = ? AND user_id = ?");
+                            $stmt3->bind_param("ss", $id, $userID);
+                            $stmt3->execute();
+                            $result3 = $stmt3->get_result();
+
+                            if ($result3->num_rows > 0) {
+                                $row = $result3->fetch_assoc();
+                                $user_score = (int) $row['user_score'];
+                                $total_questions = (int) $row['total_questions'];
+                                if ($total_questions > 0) {
+                                    $percentage = round(($user_score / $total_questions) * 100, 2);
+                                    echo "<span class='font-bold text-lg'>({$percentage}%)</span>";
+                                } else {
+                                    echo "<span class='text-red-500'>No questions found.</span>";
+                                }
+                            } else {
+                                echo "<span class='text-red-500'>Score not available.</span>";
+                            }
+                            $stmt3->close();
+                            ?>
+                        </p>
+                    </div>
                 <?php }
                 ?>
 
@@ -172,13 +201,30 @@ if (isset($_GET['uuid'])) {
                                             Next
                                         </button>
                                     </div>
-                                    <div class="w-full">
+                                    <?php if ($quizTaken): ?>
+                                        <div class="w-full">
+                                            <button id="submitBtn"
+                                                class=" text-white hidden dark:text-gray-900 bg-blue-900 rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-400 opacity-50 cursor-not-allowed"
+                                                type="button" disabled>
+                                                Submit
+                                            </button>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="w-full">
+                                            <button id="submitBtn"
+                                                class="block text-white dark:text-gray-900 bg-blue-900 rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-400"
+                                                type="button">
+                                                Submit
+                                            </button>
+                                        </div>
+                                    <?php endif; ?>
+                                    <!-- <div class="w-full">
                                         <button id="submitBtn"
                                             class="block text-white dark:text-gray-900 bg-blue-900 rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-400"
                                             type="button">
                                             Submit
                                         </button>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </form>

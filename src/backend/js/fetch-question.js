@@ -61,31 +61,69 @@ function displayQuestion(index) {
 
   questionsDiv.appendChild(questionCard);
 
-  const optionsArray = question.options.split(",").map((opt) => opt.trim());
+  const optionsArray = question.options.split("|").map((opt) => opt.trim());
+  const isMsq = question.type === "msq";
+  const inputType = isMsq ? "checkbox" : "radio";
+  const inputName = `question_${question.question_uuid}${isMsq ? "[]" : ""}`;
+
+  // For msq, store answers as array; for mcq, as string
+  let selectedValues = userAnswers[question.question_uuid];
+  if (isMsq) {
+    if (!Array.isArray(selectedValues)) selectedValues = [];
+  }
 
   optionsArray.forEach((optionText) => {
     let optionDiv = document.createElement("div");
     optionDiv.className =
       "w-full p-3 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700";
 
-    let isChecked =
-      (question.attempted && question.selected_option === optionText) ||
-      userAnswers[question.question_uuid] === optionText;
+    let isChecked;
+    if (question.attempted) {
+      if (isMsq) {
+        // selected_option is a string of joined answers, split to array
+        const attemptedArr = Array.isArray(question.selected_option)
+          ? question.selected_option
+          : (question.selected_option || "").split("|").map((s) => s.trim());
+        isChecked = attemptedArr.includes(optionText);
+      } else {
+        isChecked = question.selected_option === optionText;
+      }
+    } else {
+      if (isMsq) {
+        isChecked =
+          Array.isArray(selectedValues) && selectedValues.includes(optionText);
+      } else {
+        isChecked = selectedValues === optionText;
+      }
+    }
 
     let checked = isChecked ? "checked" : "";
     let disabled = question.attempted ? "disabled" : "";
 
     optionDiv.innerHTML = `
         <label class="flex items-center space-x-2 cursor-pointer">
-          <input type="radio" name="question_${question.question_uuid}" value="${optionText}" class="form-radio" ${checked} ${disabled}>
+          <input type="${inputType}" name="${inputName}" value="${optionText}" class="form-${inputType}" ${checked} ${disabled}>
           <span class="text-gray-700 dark:text-gray-300">${optionText}</span>
         </label>
     `;
 
     // Only add event listener if not attempted
     if (!question.attempted) {
-      optionDiv.querySelector("input").addEventListener("change", (e) => {
-        userAnswers[question.question_uuid] = e.target.value;
+      const input = optionDiv.querySelector("input");
+      input.addEventListener("change", (e) => {
+        if (isMsq) {
+          let arr = Array.isArray(userAnswers[question.question_uuid])
+            ? userAnswers[question.question_uuid].slice()
+            : [];
+          if (e.target.checked) {
+            if (!arr.includes(optionText)) arr.push(optionText);
+          } else {
+            arr = arr.filter((v) => v !== optionText);
+          }
+          userAnswers[question.question_uuid] = arr;
+        } else {
+          userAnswers[question.question_uuid] = e.target.value;
+        }
       });
     }
 

@@ -18,20 +18,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 while ($row = $result->fetch_assoc()) {
                     $notes[] = $row;
                 }
+                http_response_code(200); // OK
                 echo json_encode(['status' => 'success', 'data' => $notes]);
             } else {
+                http_response_code(404); // Not Found
                 echo json_encode(['status' => 'error', 'message' => 'No notes found for the given category and user']);
             }
 
             $conn->close();
         } else {
+            http_response_code(400); // Bad Request
             echo json_encode([
                 'status' => 'error',
                 'message' => 'Missing category_uuid or user_uuid',
             ]);
         }
     } else {
+        http_response_code(400); // Bad Request
         echo json_encode(['status' => 'error', 'message' => 'Missing uuid parameter']);
     }
+} else {
+    http_response_code(405); // Method Not Allowed
+    echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
 }
 ?>

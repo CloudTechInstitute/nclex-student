@@ -6,6 +6,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
     exit;
 } else {
     $user = $_SESSION['LoggedStudent'];
+    $subscription = $_SESSION['subscriptionStatus'];
 }
 
 
@@ -25,8 +26,9 @@ if (!isset($_SESSION['LoggedStudent'])) {
                 <button id="generateBtn"
                     class="block text-white dark:text-gray-900 bg-blue-900 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-400 dark:hover:bg-green-400 dark:focus:ring-green-600"
                     type="button">
-                    Generate Mock
+                    Start Test
                 </button>
+
                 <div id="countdownTimer" class="text-red-500 font-semibold text-xl"
                     data-duration="<?php echo (int) $category['quizDuration']; ?>">
                     Loading timer...
@@ -52,7 +54,8 @@ if (!isset($_SESSION['LoggedStudent'])) {
                                 <button
                                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                                     id="settings-styled-tab" data-tabs-target="#styled-settings" type="button"
-                                    role="tab" aria-controls="settings" aria-selected="false">Mock Test</button>
+                                    role="tab" aria-controls="settings" aria-selected="false">Comprehensive Assessment
+                                    Test</button>
                             </li>
 
                         </ul>

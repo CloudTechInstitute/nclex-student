@@ -18,13 +18,16 @@ async function fetchStudentStats() {
       const data = {
         product: subscription.product || "None",
         duration: subscription.duration || "0",
+        dateSubscribed: subscription.date_subscribed || "N/A",
+        dateExpired: subscription.expiry_date || "N/A",
+        duration: subscription.duration || "0",
         packageCount: result.package_count || 0,
         quizCount: result.quiz_count || 0,
         quizCompleted: result.quiz_completed || 0,
         mockCount: result.mock_count || 0,
         mockCompleted: result.mock_completed || 0,
         tutorialCount: result.tutorial_count || 0,
-        tutorialCompleted: result.tutorial_completed || 0, // <- Ensure backend sends this if needed
+        tutorialCompleted: result.tutorial_completed || 0,
       };
 
       displayDashboardStats(data);
@@ -45,7 +48,9 @@ async function fetchStudentStats() {
 
 function displayDashboardStats({
   product,
-  duration,
+  // duration,
+  dateSubscribed,
+  dateExpired,
   quizCount,
   quizCompleted,
   mockCount,
@@ -53,6 +58,18 @@ function displayDashboardStats({
   tutorialCount,
   tutorialCompleted = 0,
 }) {
+  const quizzesAllowed = 10;
+
+  // Calculate days left
+  let daysLeft = "N/A";
+  if (dateSubscribed !== "N/A" && dateExpired !== "N/A") {
+    const subDate = new Date(dateSubscribed);
+    const expDate = new Date(dateExpired);
+    const diffTime = expDate - new Date();
+    daysLeft =
+      diffTime > 0 ? Math.ceil(diffTime / (1000 * 60 * 60 * 24)) : "expired";
+  }
+
   document.getElementById("packageCard").innerHTML = `
     <p class="mb-2 uppercase font-bold">Subscription</p>
     <hr>
@@ -63,7 +80,7 @@ function displayDashboardStats({
         </div>
         <div class="text-center">
             <p class="text-sm">Days Left</p>
-            <h5 class="mb-2 text-3xl font-semibold tracking-tight">${duration}</h5>
+            <h5 class="mb-2 text-3xl font-semibold tracking-tight">${daysLeft}</h5>
         </div>
     </div>
   `;
@@ -74,7 +91,7 @@ function displayDashboardStats({
     <div class="flex gap-4 mt-2 justify-between">
         <div class="text-center">
             <p class="text-sm">Total</p>
-            <h5 class="mb-2 text-3xl font-semibold tracking-tight">${quizCount}</h5>
+            <h5 class="mb-2 text-3xl font-semibold tracking-tight">${quizzesAllowed}</h5>
         </div>
         <div class="text-center">
             <p class="text-sm">Taken</p>
@@ -83,14 +100,14 @@ function displayDashboardStats({
         <div class="text-center">
             <p class="text-sm">Remaining</p>
             <h5 class="mb-2 text-3xl font-semibold tracking-tight">${
-              quizCount - quizCompleted
+              quizzesAllowed - quizCompleted
             }</h5>
         </div>
     </div>
   `;
 
   document.getElementById("assessmentCard").innerHTML = `
-    <p class="mb-2 uppercase font-bold">Mocks</p>
+    <p class="mb-2 uppercase font-bold">Assessment</p>
     <hr>
     <div class="flex gap-4 mt-2 justify-between">
         <div class="text-center">

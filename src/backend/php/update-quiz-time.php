@@ -22,16 +22,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $updateStmt->bind_param("dss", $totalSeconds, $uuid, $userID);
 
         if ($updateStmt->execute()) {
+            http_response_code(200);
             echo json_encode(['status' => 'success', 'message' => 'Time updated successfully']);
         } else {
+            http_response_code(500);
             echo json_encode(['status' => 'error', 'message' => 'Failed to update time']);
         }
 
         $updateStmt->close();
         $conn->close();
     } else {
+        http_response_code(400);
         echo json_encode(['status' => 'error', 'message' => 'Missing required parameters']);
     }
 } else {
+    http_response_code(405);
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }

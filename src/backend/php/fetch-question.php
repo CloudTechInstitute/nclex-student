@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $userId = isset($_SESSION['studentID']) ? $_SESSION['studentID'] : null;
 
         if (!$userId) {
+            http_response_code(401); // Unauthorized
             echo json_encode(['status' => 'error', 'message' => 'User not authenticated']);
             exit;
         }
@@ -44,34 +45,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     $attemptData = $attemptResult->fetch_assoc();
                     $row['attempted'] = true;
                     $row['selected_option'] = $attemptData['selected_option'];
-                    // keep solution visible only if attempted
                 } else {
                     $row['attempted'] = false;
-                    // $row['selected_option'] = null;
-                    unset($row['solution']); // hide solution if not attempted
-                    unset($row['selected_option']); // hide solution if not attempted
-                    unset($row['answer']); // hide solution if not attempted
+                    unset($row['solution']);
+                    unset($row['selected_option']);
+                    unset($row['answer']);
                 }
 
-                // unset($row['solution']);
                 $questions[] = $row;
-
                 $stmt3->close();
             }
 
+            http_response_code(200); // OK
             echo json_encode(['status' => 'success', 'category' => $category, 'data' => $questions]);
             $stmt2->close();
         } else {
+            http_response_code(404); // Not Found
             echo json_encode(['status' => 'error', 'message' => 'Category not found']);
         }
 
         $stmt->close();
     } else {
+        http_response_code(400); // Bad Request
         echo json_encode(['status' => 'error', 'message' => 'ID parameter is missing']);
     }
 
     $conn->close();
 } else {
+    http_response_code(405); // Method Not Allowed
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>

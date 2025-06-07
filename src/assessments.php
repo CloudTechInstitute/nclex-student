@@ -6,6 +6,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
     exit;
 } else {
     $user = $_SESSION['LoggedStudent'];
+    $subscription = $_SESSION['subscriptionStatus'];
 }
 
 // Fetch all topics from quizs table
@@ -50,7 +51,7 @@ if ($result && $result->num_rows > 0) {
                         <div
                             class="w-full max-w-sm bg-white border border-gray-300 rounded-lg shadow-sm dark:bg-green-600 dark:border-green-400">
                             <div class="flex justify-center items-center p-10">
-                                <h5 class="mb-1 text-md font-normal text-blue-600 dark:text-white">Mock Test</h5>
+                                <h5 class="mb-1 text-md font-normal text-blue-600 dark:text-white">Assessment Test</h5>
                             </div>
                         </div>
                     </a>

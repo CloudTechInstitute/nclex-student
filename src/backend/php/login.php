@@ -9,6 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
     if (empty($email) || empty($password)) {
+        http_response_code(400); // Bad Request
         echo json_encode(['status' => 'error', 'message' => 'Fill in all required fields!!']);
         exit;
     }
@@ -55,6 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $stmt->store_result();
 
                 if ($stmt->num_rows === 0) {
+                    http_response_code(403); // Forbidden
                     echo json_encode(['status' => 'error', 'message' => 'Device limit reached. You can only login from 2 devices.']);
                     $stmt->close();
                     $conn->close();
@@ -103,23 +105,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $response["subscriptionStatus"] = 'no subscription';
             }
 
-
             $subStmt->close();
 
+            http_response_code(200); // OK
             $response["status"] = "success";
             $response["message"] = "Login Successful";
             $response["user"] = $user;
 
         } else {
+            http_response_code(401); // Unauthorized
             $response["status"] = "error";
             $response["message"] = "Invalid username or password. Please try again.";
         }
     } else {
+        http_response_code(404); // Not Found
         $response["status"] = "error";
         $response["message"] = "User not found. Please try again.";
     }
 
 } else {
+    http_response_code(405); // Method Not Allowed
     $response["status"] = "error";
     $response["message"] = "Request method not allowed.";
 }

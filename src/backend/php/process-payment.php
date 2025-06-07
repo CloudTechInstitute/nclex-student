@@ -13,6 +13,7 @@ header("Content-Type: application/json"); // Ensure JSON response
 
 // Check if request is POST
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    http_response_code(405);
     echo json_encode(["status" => "error", "message" => "Invalid request"]);
     exit();
 }
@@ -51,12 +52,15 @@ if ($paystackResponse['status'] && $paystackResponse['data']['status'] == "succe
     $query = "INSERT INTO subscriptions(subscriber, user_id, email, phone, product_uuid, product, amount, duration, date_subscribed, expiry_date, subscription_id, reference, plan) VALUES ('$subscriber', '$user_id', '$email', '$phone', '$productUUID', '$product', '$amount', '$duration', '$date', '$expiryDate', '$subscriptionUUID', '$paystackRef', '$plan')";
 
     if (mysqli_query($conn, $query)) {
-
+        $_SESSION['subscriptionStatus'] = "not expired";
+        http_response_code(200);
         echo json_encode(["status" => "success", "message" => "Payment processed successfully"]);
     } else {
+        http_response_code(400);
         echo json_encode(["status" => "error", "message" => "Database error: " . mysqli_error($conn)]);
     }
 } else {
+    http_response_code(400);
     echo json_encode(["status" => "error", "message" => "Payment verification failed"]);
 }
 ?>

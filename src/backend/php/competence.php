@@ -7,6 +7,7 @@ header('Content-Type: application/json');
 $userId = $_SESSION['studentID'] ?? null;
 
 if (!$userId) {
+    http_response_code(401); // Unauthorized
     echo json_encode(['status' => 'error', 'message' => 'User not logged in']);
     exit;
 }
@@ -47,6 +48,7 @@ if ($stmt) {
         }
     }
 
+    http_response_code(200); // OK
     echo json_encode([
         'status' => 'success',
         'data' => [
@@ -56,9 +58,8 @@ if ($stmt) {
     ]);
     $stmt->close();
 } else {
+    http_response_code(500); // Internal Server Error
     echo json_encode(['status' => 'error', 'message' => 'Failed to prepare query']);
 }
 $conn->close();
-
-
 ?>

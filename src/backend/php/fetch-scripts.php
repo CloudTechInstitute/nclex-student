@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $roleResult = $conn->query($roleQuery);
 
     if ($employeeResult && $roleResult) {
+        http_response_code(200); // OK
         $employeeRow = $employeeResult->fetch_assoc();
         $roleRow = $roleResult->fetch_assoc();
 
@@ -21,11 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             'role_count' => $roleRow['role_count']
         ]);
     } else {
+        http_response_code(500); // Internal Server Error
         echo json_encode(['status' => 'error', 'message' => 'Failed to fetch counts']);
     }
 
     $conn->close();
 } else {
+    http_response_code(405); // Method Not Allowed
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>

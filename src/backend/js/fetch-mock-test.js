@@ -19,7 +19,6 @@ async function fetchQuestions() {
       currentIndex = 0;
       displayQuestion(currentIndex);
 
-      // ✅ Start countdown timer from DB duration
       if (result.duration) {
         setupCountdownTimer(parseInt(result.duration));
       }
@@ -47,7 +46,10 @@ function displayQuestion(index) {
   }
 
   const question = questions[index];
-  const options = question.options.split(",").map((opt) => opt.trim());
+  const options = question.options.split("|").map((opt) => opt.trim());
+  const isMsq = question.type === "msq";
+  const inputType = isMsq ? "checkbox" : "radio";
+  const answerKey = question.question_uuid;
 
   questionsDiv.innerHTML = `
     <div class="w-full p-3 bg-white mb-2 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
@@ -62,17 +64,27 @@ function displayQuestion(index) {
   `;
 
   options.forEach((option) => {
-    const isChecked =
-      userAnswers[question.question_uuid] === option ||
-      (question.attempted && question.selected_option === option);
+    let isChecked;
+    if (isMsq) {
+      // For MSQ, userAnswers[answerKey] is an array of selected options
+      isChecked =
+        (Array.isArray(userAnswers[answerKey]) &&
+          userAnswers[answerKey].includes(option)) ||
+        (question.attempted &&
+          Array.isArray(question.selected_option) &&
+          question.selected_option.includes(option));
+    } else {
+      // For MCQ, userAnswers[answerKey] is a string
+      isChecked =
+        userAnswers[answerKey] === option ||
+        (question.attempted && question.selected_option === option);
+    }
 
     questionsDiv.innerHTML += `
       <div class="w-full p-3 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
           <label class="flex items-center space-x-2 cursor-pointer">
-              <input type="radio" name="question_${
-                question.question_uuid
-              }" value="${option}" 
-                     class="form-radio" ${isChecked ? "checked" : ""}
+              <input type="${inputType}" name="question_${answerKey}" value="${option}" 
+                     class="form-${inputType}" ${isChecked ? "checked" : ""}
                      ${question.attempted ? "disabled" : ""}>
               <span class="text-gray-700 dark:text-gray-300">${option}</span>
           </label>
@@ -81,13 +93,36 @@ function displayQuestion(index) {
   });
 
   if (!question.attempted) {
-    document
-      .querySelectorAll(`input[name="question_${question.question_uuid}"]`)
-      .forEach((radio) => {
-        radio.addEventListener("change", (e) => {
-          userAnswers[question.question_uuid] = e.target.value;
+    if (isMsq) {
+      // For MSQ, handle checkboxes
+      document
+        .querySelectorAll(`input[name="question_${answerKey}"]`)
+        .forEach((checkbox) => {
+          checkbox.addEventListener("change", (e) => {
+            if (!Array.isArray(userAnswers[answerKey])) {
+              userAnswers[answerKey] = [];
+            }
+            if (e.target.checked) {
+              if (!userAnswers[answerKey].includes(e.target.value)) {
+                userAnswers[answerKey].push(e.target.value);
+              }
+            } else {
+              userAnswers[answerKey] = userAnswers[answerKey].filter(
+                (val) => val !== e.target.value
+              );
+            }
+          });
         });
-      });
+    } else {
+      // For MCQ, handle radio buttons
+      document
+        .querySelectorAll(`input[name="question_${answerKey}"]`)
+        .forEach((radio) => {
+          radio.addEventListener("change", (e) => {
+            userAnswers[answerKey] = e.target.value;
+          });
+        });
+    }
   }
 
   document.getElementById("prevBtn").disabled = index === 0;
@@ -96,8 +131,13 @@ function displayQuestion(index) {
   const submitBtn = document.getElementById("submitBtn");
   if (question.attempted) {
     const solutionCard = document.createElement("div");
-    const correctAnswer = question.answer || "Correct answer unavailable";
-    const selectedAnswer = question.selected_option || "Not available";
+    // For MSQ, show arrays as comma separated
+    const correctAnswer = Array.isArray(question.answer)
+      ? question.answer.join(", ")
+      : question.answer || "Correct answer unavailable";
+    const selectedAnswer = Array.isArray(question.selected_option)
+      ? question.selected_option.join(", ")
+      : question.selected_option || "Not available";
 
     solutionCard.innerHTML = `
       ${
@@ -207,7 +247,6 @@ async function showFinalResult(uuid) {
     if (data.status === "success") {
       const resultDisplay = document.getElementById("solutionBox");
 
-      // ✅ Calculate time taken
       const durationInSeconds = Math.floor(
         (quizEndTime - quizStartTime) / 1000
       );
@@ -298,19 +337,13 @@ function setupCountdownTimer(durationInMinutes) {
 document.addEventListener("DOMContentLoaded", () => {
   const countdownElement = document.getElementById("countdownTimer");
   if (countdownElement) {
-    // const durationInMinutes = parseInt(
-    //   countdownElement.getAttribute("data-duration")
-    // );
-    // if (!isNaN(durationInMinutes)) {
-    //   setupCountdownTimer(durationInMinutes);
-    // }
   }
 
   document.getElementById("generateBtn").addEventListener("click", () => {
     fetchQuestions();
     const btn = document.getElementById("generateBtn");
     btn.disabled = true;
-    btn.textContent = "Mock Started";
+    btn.textContent = "Assessment test in progress...";
   });
 
   document.getElementById("nextBtn").addEventListener("click", nextQuestion);

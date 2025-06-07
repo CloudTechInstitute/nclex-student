@@ -27,14 +27,20 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             "Email: $email\n" .
             "Message: $message";
         if ($mail->send()) {
+            http_response_code(200);
             echo "Message sent successfully";
         } else {
+            http_response_code(500);
             echo "Message could not be sent, Error: " . $mail->ErrorInfo;
         }
 
     } catch (Exception $e) {
+        http_response_code(500);
         echo "Message could not be sent, Error: " . $mail->ErrorInfo;
     }
 
+} else {
+    http_response_code(405);
+    echo "Method Not Allowed";
 }
 ?>

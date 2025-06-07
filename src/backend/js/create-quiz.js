@@ -30,25 +30,27 @@ document
     `;
 
     try {
-      let response = await fetch("backend/php/create-quiz.php", {
+      const response = await fetch("backend/php/create-quiz.php", {
         method: "POST",
         body: formData,
       });
 
-      let result;
+      let result = await response.json();
+
       if (response.ok) {
-        result = await response.json();
         toastMessage = result.message;
         toastType = "success";
 
         this.reset();
         fetchQuiz();
       } else {
-        throw new Error("Unable to create Quiz. Please try again.");
+        toastMessage = result.message;
+        toastType = "error";
+        this.reset();
       }
     } catch (error) {
       console.error("Error:", error);
-      toastMessage = "Unable to create Quiz. Please try again.";
+      toastMessage = "A network error occurred. Please try again.";
       toastType = "error";
     }
 

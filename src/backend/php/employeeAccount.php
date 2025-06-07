@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //Validate required fields
     if (empty($EmployeeName) || empty($EmployeeEmail) || empty($EmployeeRole) || empty($EmployeePhone) || empty($EmployeeAddress) || empty($EmployeeID)) {
+        http_response_code(400); // Bad Request
         echo json_encode(['status' => 'error', 'message' => 'Missing required fields']);
         exit;
     }
@@ -25,14 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("sssssssss", $EmployeeName, $EmployeeEmail, $EmployeeRole, $EmployeePhone, $EmployeeAddress, $EmployeeID, $password, $status, $date);
 
     if ($stmt->execute()) {
+        http_response_code(201); // Created
         echo json_encode(['status' => 'success', 'message' => 'Account added successfully']);
     } else {
+        http_response_code(500); // Internal Server Error
         echo json_encode(['status' => 'error', 'message' => 'Could not add Account, something went wrong', 'error' => $stmt->error]);
     }
 
     $stmt->close();
     $conn->close();
 } else {
+    http_response_code(405); // Method Not Allowed
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>

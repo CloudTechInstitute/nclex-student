@@ -34,14 +34,18 @@ function displaySpeedTest(questions) {
     }
 
     const question = questions[index];
-    const options = question.options.split(",").map((opt) => opt.trim());
+    const options = question.options.split("|").map((opt) => opt.trim());
+    const isMSQ = question.type && question.type.toLowerCase() === "msq";
+
+    const inputType = isMSQ ? "checkbox" : "radio";
+    const nameAttr = isMSQ ? `option_${index}_` : `question_${index}`;
 
     const optionsHTML = options
       .map(
         (option, optIndex) => `
         <div>
           <label class="flex items-center space-x-2">
-            <input type="radio" name="question_${index}" value="${option}" />
+            <input type="${inputType}" name="${nameAttr}" value="${option}" />
             <span>${option}</span>
           </label>
         </div>
@@ -60,14 +64,14 @@ function displaySpeedTest(questions) {
           ${optionsHTML}
         </form>
         <div class="flex justify-between items-center">
-          <div class="text-xs text-red-500" id="countdown">Next question in 20 seconds...</div>
+          <div class="text-xs text-red-500" id="countdown">Next question in 30 seconds...</div>
           <button id="submitBtn" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition">Submit</button>
         </div>
       </div>
     `;
 
     questionStartTime = Date.now(); // capture time in milliseconds
-    let secondsLeft = 20;
+    let secondsLeft = 30;
     const countdownEl = document.getElementById("countdown");
 
     countdownInterval = setInterval(() => {
@@ -90,19 +94,45 @@ function displaySpeedTest(questions) {
     });
 
     function handleSubmit() {
-      const selected = document.querySelector(
-        `input[name="question_${index}"]:checked`
-      );
-      const answer = selected ? selected.value : null;
+      let answer;
+      if (isMSQ) {
+        // For MSQ, collect all checked values as an array
+        answer = Array.from(
+          document.querySelectorAll(
+            `input[type="checkbox"][name="${nameAttr}"]:checked`
+          )
+        ).map((el) => el.value);
+      } else {
+        // For MCQ, get the selected radio value
+        const selected = document.querySelector(
+          `input[type="radio"][name="${nameAttr}"]:checked`
+        );
+        answer = selected ? selected.value : null;
+      }
 
       const timeTaken = Math.floor((Date.now() - questionStartTime) / 1000);
       totalTimeTaken += timeTaken;
+
+      // For MSQ, compare arrays (assuming question.answer is also an array or a pipe-separated string)
+      let isCorrect;
+      if (isMSQ) {
+        const correctAnswers = Array.isArray(question.answer)
+          ? question.answer
+          : question.answer.split("|").map((a) => a.trim());
+        isCorrect =
+          Array.isArray(answer) &&
+          answer.length === correctAnswers.length &&
+          answer.every((ans) => correctAnswers.includes(ans)) &&
+          correctAnswers.every((ans) => answer.includes(ans));
+      } else {
+        isCorrect = answer === question.answer;
+      }
 
       userResponses.push({
         questionId: question.id,
         selectedAnswer: answer,
         correctAnswer: question.answer,
-        isCorrect: answer === question.answer,
+        isCorrect: isCorrect,
         timeTaken: timeTaken,
       });
 

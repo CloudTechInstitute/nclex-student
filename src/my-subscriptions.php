@@ -7,6 +7,7 @@ if (!isset($_SESSION['LoggedStudent']) || !isset($_SESSION['studentID'])) {
 } else {
     $user = $_SESSION['LoggedStudent'];
     $userID = $_SESSION['studentID'];
+    $subscription = $_SESSION['subscriptionStatus'];
 }
 
 ?>

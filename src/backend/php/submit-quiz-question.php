@@ -1,5 +1,5 @@
 <?php
-session_start(); // start session at the top
+session_start();
 include 'connection.php';
 header('Content-Type: application/json');
 
@@ -10,16 +10,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $quiz_uuid = isset($_POST['quiz_id']) ? trim($_POST['quiz_id']) : null;
 
     if (!$quiz_uuid) {
+        http_response_code(400);
         echo json_encode(['status' => 'error', 'message' => 'Quiz ID (uuid) is missing']);
         exit;
     }
 
     if ($questionId === 0 || empty($submittedAnswer) || !$userId) {
+        http_response_code(400);
         echo json_encode(['status' => 'error', 'message' => 'Invalid input']);
         exit;
     }
 
-    // Fetch the correct answer and solution from the database
     $stmt = $conn->prepare("SELECT question_uuid, question, answer, solution FROM questions WHERE question_uuid = ?");
     $stmt->bind_param("s", $questionId);
     $stmt->execute();
@@ -34,12 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $isCorrect = strcasecmp($correctAnswer, $submittedAnswer) === 0;
 
-        // Insert into attempted table
         $insertStmt = $conn->prepare("INSERT INTO attempted_quiz (quiz_id, user_id, question_id, question, selected_option, is_correct) VALUES (?, ?, ?, ?, ?, ?)");
         $insertStmt->bind_param("sssssi", $quiz_uuid, $userId, $questionUuid, $questionText, $submittedAnswer, $isCorrect);
         $insertStmt->execute();
         $insertStmt->close();
 
+        http_response_code(200);
         echo json_encode([
             'status' => 'success',
             'correct' => $isCorrect,
@@ -48,12 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'selected_answer' => $submittedAnswer
         ]);
     } else {
+        http_response_code(404);
         echo json_encode(['status' => 'error', 'message' => 'Question not found']);
     }
 
     $stmt->close();
     $conn->close();
 } else {
+    http_response_code(405);
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>

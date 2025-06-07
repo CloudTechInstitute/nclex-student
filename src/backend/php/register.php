@@ -24,14 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (
         empty($fname) || empty($lname) || empty($email) || empty($phone) || empty($country) || empty($password) || empty($cpassword)
     ) {
-        http_response_code(400);
+        http_response_code(422); // Unprocessable Entity
         echo json_encode(['status' => 'error', 'message' => 'Missing required fields']);
         exit;
     }
 
     // Password confirmation
     if ($password !== $cpassword) {
-        http_response_code(400);
+        http_response_code(422); // Unprocessable Entity
         echo json_encode(['status' => 'error', 'message' => 'Passwords do not match']);
         exit;
     }
@@ -105,18 +105,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 http_response_code(201); // Created
                 echo json_encode(['status' => 'success', 'message' => 'Account created. Please check your email to verify.']);
             } else {
-                http_response_code(500);
+                http_response_code(500); // Internal Server Error
                 echo json_encode(['status' => 'error', 'message' => 'Could not create account', 'error' => $stmt->error]);
             }
 
             $stmt->close();
         } else {
-            http_response_code(500);
+            http_response_code(502); // Bad Gateway (email sending failed)
             echo json_encode(['status' => 'error', 'message' => 'Email could not be sent', 'error' => $mail->ErrorInfo]);
         }
 
     } catch (Exception $e) {
-        http_response_code(500);
+        http_response_code(502); // Bad Gateway (email sending failed)
         echo json_encode(['status' => 'error', 'message' => 'Email sending failed', 'error' => $mail->ErrorInfo]);
     }
 

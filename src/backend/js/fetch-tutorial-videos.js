@@ -61,11 +61,19 @@ function displayVideos(videos) {
     // Create thumbnail container
     const thumbnailDiv = document.createElement("div");
     thumbnailDiv.classList.add(
-      "w-full",
-      "h-36",
+      "w-[200px]",
+      "lg:w-full",
+      "h-24",
+      "lg:h-36",
       "rounded-md",
       "overflow-hidden",
-      "mb-2"
+      "mb-2",
+      "bg-gray-200",
+      "flex",
+      "items-center",
+      "justify-center",
+      "text-sm",
+      "text-gray-600"
     );
 
     const thumbnail = document.createElement("img");
@@ -84,7 +92,9 @@ function displayVideos(videos) {
       "text-black",
       "text-left",
       "font-semibold",
-      "dark:text-white"
+      "dark:text-white",
+      "truncate",
+      "w-[200px]"
     );
     title.innerText = video.name;
 
@@ -123,7 +133,7 @@ function displayVideos(videos) {
     videoElement.setAttribute("oncontextmenu", "return false;");
 
     const sourceElement = document.createElement("source");
-    sourceElement.src = `videos/${video.filename}`;
+    sourceElement.src = `http://localhost/content-center-webapp/src/backend/uploads/videos/${video.filename}`;
     sourceElement.type = "video/mp4";
 
     videoElement.appendChild(sourceElement);

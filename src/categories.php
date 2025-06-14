@@ -17,8 +17,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
 
 <body class="dark:bg-gray-800 dark:text-white bg-gray-200">
     <!-- Mobile Sidebar Toggle Button -->
-    <header
-        class="p-4 bg-gray-900 text-white flex items-center justify-between lg:hidden fixed top-0 left-0 right-0 z-50">
+    <header class="p-4 bg-gray-900 text-white flex items-center justify-between lg:hidden">
         <button onclick="toggleSidebar()" class="text-white">
             <!-- Hamburger Icon -->
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -30,7 +29,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
     </header>
 
 
-    <div class=" flex h-screen  mt-12 lg:mt-0">
+    <div class=" flex h-screen">
         <!-- Sidebar -->
         <?php include 'components/sidebar.php' ?>
         <!-- Main Content -->

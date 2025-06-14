@@ -47,6 +47,16 @@ if (isset($_GET['uuid'])) {
 ?>
 
 <body class="dark:bg-gray-800 bg-gray-200 dark:text-white">
+    <header class="p-4 bg-gray-900 text-white flex items-center justify-between lg:hidden">
+        <button onclick="toggleSidebar()" class="text-white">
+            <!-- Hamburger Icon -->
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+        <span class="font-semibold text-lg">Global Nclex</span>
+
+    </header>
     <div class=" flex h-screen">
         <!-- Sidebar -->
         <?php include 'components/sidebar.php' ?>

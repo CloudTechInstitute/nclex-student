@@ -37,36 +37,41 @@ if (isset($_GET['uuid'])) {
 }
 ?>
 
+
 <body class="dark:bg-gray-800 bg-gray-200 dark:text-white">
+    <header class="p-4 bg-gray-900 text-white flex items-center justify-between lg:hidden">
+        <button onclick="toggleSidebar()" class="text-white">
+            <!-- Hamburger Icon -->
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+        <span class="font-semibold text-lg">Global Nclex</span>
+
+    </header>
     <div class=" flex h-screen">
         <!-- Sidebar -->
         <?php include 'components/sidebar.php' ?>
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col px-6 ">
+        <div class="flex-1 flex flex-col lg:px-6">
             <!-- Content Area -->
             <div class="py-2 flex justify-between items-end mb-6">
                 <p class="uppercase font-bold text-xl"></p>
             </div>
-            <div class="uppercase">
+            <div class="uppercase px-4 lg:px-0">
                 <div><?php echo htmlspecialchars($category['title']) . ' '; ?> </div>
             </div>
 
-            <div class="[&::-webkit-scrollbar]:w-2
-                                    [&::-webkit-scrollbar-track]:rounded-full
-                                    [&::-webkit-scrollbar-track]:bg-gray-100
-                                    [&::-webkit-scrollbar-thumb]:rounded-full
-                                    [&::-webkit-scrollbar-thumb]:bg-gray-300
-                                    dark:[&::-webkit-scrollbar-track]:bg-gray-700
-                                    dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 overflow-y-auto">
-                <main class="m-2">
+            <div class="w-full">
+                <main class="">
                     <div class="mb-2 border-b border-gray-200 dark:border-gray-700">
-                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-styled-tab"
-                            data-tabs-toggle="#default-styled-tab-content"
+                        <ul class="flex flex-wrap -mb-px text-xs md:text-sm font-medium text-center"
+                            id="default-styled-tab" data-tabs-toggle="#default-styled-tab-content"
                             data-tabs-active-classes="text-blue-600 hover:text-blue-600 dark:text-green-500 dark:hover:text-green-500 border-blue-600 dark:border-green-500"
                             data-tabs-inactive-classes="dark:border-transparent text-gray-500 hover:text-gray-600 dark:text-gray-400 border-gray-100 hover:border-gray-300 dark:border-gray-700 dark:hover:text-gray-300"
                             role="tablist">
 
-                            <li class="me-2" role="presentation">
+                            <li class="lg:me-2" role="presentation">
                                 <button
                                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                                     id="dashboard-styled-tab" data-tabs-target="#styled-dashboard" type="button"
@@ -78,7 +83,7 @@ if (isset($_GET['uuid'])) {
                                     id="settings-styled-tab" data-tabs-target="#styled-settings" type="button"
                                     role="tab" aria-controls="settings" aria-selected="false">Practice Test</button>
                             </li> -->
-                            <li class="me-2" role="presentation">
+                            <li class="lg:me-2" role="presentation">
                                 <button
                                     class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
                                     id="settings-styled-tab" data-tabs-target="#styled-notes" type="button" role="tab"
@@ -99,27 +104,29 @@ if (isset($_GET['uuid'])) {
                             </p>
                         </div> -->
                         <!-- videos tab -->
-                        <div class="hidden p-4 rounded-lg bg-gray-100 border border-gray-300 dark:border-gray-600 dark:bg-gray-700"
+                        <div class="hidden w-full rounded-lg bg-gray-100 border border-gray-300 dark:border-gray-600 dark:bg-gray-700"
                             id="styled-dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
-                            <div class="">
-                                <div class="flex gap-6 h-[470px] max-h-[470px]">
-                                    <div class="border-b border-gray-200 dark:border-gray-700 w-[30%] [&::-webkit-scrollbar]:w-2
+                            <div class="w-full p-2 lg:p-4">
+                                <div class="lg:flex gap-6 lg:h-[430px] 2xl:h-[450px] w-full mb-2">
+                                    <div id="default-tab-content" class="lg:w-[70%] mb-3 lg:mb-0">
+
+                                    </div>
+                                    <div class="border-b border-gray-200 dark:border-gray-700 lg:w-[30%] [&::-webkit-scrollbar]:w-2
                                     [&::-webkit-scrollbar-track]:rounded-full
                                     [&::-webkit-scrollbar-track]:bg-gray-100
                                     [&::-webkit-scrollbar-thumb]:rounded-full
                                     [&::-webkit-scrollbar-thumb]:bg-gray-300
                                     dark:[&::-webkit-scrollbar-track]:bg-gray-700
                                     dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 overflow-y-auto">
-                                        <div id="videoIcons">
-                                            <ul class="text-sm font-medium text-center m-4" id="default-tab"
-                                                data-tabs-toggle="#default-tab-content" role="tablist">
+                                        <div id="videoIcons"
+                                            class="w-[350px] md:w-[740px] lg:w-full overflow-x-auto lg:overflow-y-auto">
+                                            <ul class="flex w-full md:w-[600px] lg:w-full xl:w-full flex-row lg:flex-col gap-4 text-sm font-medium text-center mx-2 lg:m-0"
+                                                id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
 
                                             </ul>
                                         </div>
                                     </div>
-                                    <div id="default-tab-content" class="w-[70%]">
 
-                                    </div>
                                 </div>
                                 <div class="p-2">
                                     <form method="post" id="notesForm">

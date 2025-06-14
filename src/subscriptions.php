@@ -13,8 +13,7 @@ if (!isset($_SESSION['LoggedStudent'])) {
 
 
 <body class="dark:bg-gray-800 bg-gray-200 dark:text-white">
-    <header
-        class="p-4 bg-gray-900 text-white flex items-center justify-between lg:hidden fixed top-0 left-0 right-0 z-50">
+    <header class="p-4 bg-gray-900 text-white flex items-center justify-between lg:hidden">
         <button onclick="toggleSidebar()" class="text-white">
             <!-- Hamburger Icon -->
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -24,13 +23,13 @@ if (!isset($_SESSION['LoggedStudent'])) {
         <span class="font-semibold text-lg">Global Nclex</span>
 
     </header>
-    <div class=" flex h-screen mt-12 lg:mt-0">
+    <div class=" flex h-screen">
         <!-- Sidebar -->
         <?php include 'components/sidebar.php' ?>
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-auto">
             <!-- Content Area -->
-            <div class="px-6 py-6 flex justify-between items-end mb-5">
+            <div class="px-6 py-2 flex justify-between items-end mb-5">
                 <p class="uppercase text-blue-600 dark:text-green-600 font-bold text-xl">Subscriptions</p>
             </div>
             <div class="mb-4">
@@ -66,8 +65,10 @@ if (!isset($_SESSION['LoggedStudent'])) {
                                 <div
                                     class="w-full p-4 bg-white border-2 border-blue-400 rounded-lg shadow-lg sm:p-8 dark:bg-gray-700 dark:border-green-400">
                                     <form method="GET" action="checkout.php">
-                                        <input type='hidden' name='product_uuid' value='<?php echo htmlspecialchars($product['uuid']); ?>' />
-                                        <input type=' hidden' name='product_cost' value='<?php echo htmlspecialchars($product['cost']); ?>' />
+                                        <input type='hidden' name='product_uuid'
+                                            value='<?php echo htmlspecialchars($product['uuid']); ?>' />
+                                        <input type='hidden' name='product_cost'
+                                            value='<?php echo htmlspecialchars($product['cost']); ?>' />
 
                                         <h5 class="mb-4 text-sm text-center rounded-full font-medium dark:text-green-600">
                                             <?php echo htmlspecialchars($product['name']); ?>

@@ -62,7 +62,7 @@
                         class="block mb-2 text-xs uppercase font-medium text-gray-900 dark:text-gray-300">
                         Select Topics
                     </label>
-                    <div class="grid grid-cols-3 gap-3">
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                         <!-- Apply grid here -->
                         <?php foreach ($categoryTopics as $topic): ?>
                             <label class="flex items-center space-x-2">

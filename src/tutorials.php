@@ -27,6 +27,16 @@ if ($result && $result->num_rows > 0) {
 ?>
 
 <body class="dark:bg-gray-800 bg-gray-200 dark:text-white">
+    <header class="p-4 bg-gray-900 text-white flex items-center justify-between lg:hidden">
+        <button onclick="toggleSidebar()" class="text-white">
+            <!-- Hamburger Icon -->
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+        <span class="font-semibold text-lg">Global Nclex</span>
+
+    </header>
     <div class=" flex h-screen">
         <!-- Sidebar -->
         <?php include 'components/sidebar.php' ?>
@@ -43,8 +53,9 @@ if ($result && $result->num_rows > 0) {
                     </button>
                 </div>
             </div>
-            <div class="mb-4 flex items-center gap-4">
-                <div class="w-full">Select or search for any tutorial to start learning</div>
+            <div class="mb-4 md:flex items-center gap-4">
+                <div class="w-full text-xs md:text-base mb-3 md:mb-0">Select or search for any tutorial to start
+                    learning</div>
                 <div class="w-full">
                     <form class="max-w-md mx-auto" method="post">
                         <div class="relative">
@@ -66,7 +77,7 @@ if ($result && $result->num_rows > 0) {
             </div>
             <hr class="border border-gray-400">
             <div class="overflow-y-auto mt-4">
-                <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6" id="tutorialsDiv">
+                <main class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" id="tutorialsDiv">
 
 
                 </main>

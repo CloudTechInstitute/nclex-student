@@ -13,27 +13,38 @@ if (!isset($_SESSION['LoggedStudent'])) {
 
 
 <body class="dark:bg-gray-800 bg-gray-200 dark:text-white">
-    <div class=" flex h-screen">
+    <header
+        class="p-4 bg-gray-900 text-white flex items-center justify-between lg:hidden fixed top-0 left-0 right-0 z-50">
+        <button onclick="toggleSidebar()" class="text-white">
+            <!-- Hamburger Icon -->
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+        <span class="font-semibold text-lg">Global Nclex</span>
+
+    </header>
+    <div class=" flex h-screen mt-12 lg:mt-0">
         <!-- Sidebar -->
         <?php include 'components/sidebar.php' ?>
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col">
+        <div class="flex-1 flex flex-col overflow-auto">
             <!-- Content Area -->
             <div class="px-6 py-6 flex justify-between items-end mb-5">
                 <p class="uppercase text-blue-600 dark:text-green-600 font-bold text-xl">Subscriptions</p>
             </div>
-            <div class="">
+            <div class="mb-4">
                 <div class="px-6 mb-5">
-                    <p class="mb-3">Select the package that works for you.</p>
+                    <p class="text-xs md:text-base mb-3 md:mb-4">Select the package that works for you.</p>
                     <hr>
-                    <div class="overflow-y-auto max-h-[550px] mt-4 px-4 [&::-webkit-scrollbar]:w-2
+                    <div class="overflow-y-auto max-h-[530px] xl:max-h-[2400px] mt-4 px-4 [&::-webkit-scrollbar]:w-2
                                     [&::-webkit-scrollbar-track]:rounded-full
                                     [&::-webkit-scrollbar-track]:bg-gray-100
                                     [&::-webkit-scrollbar-thumb]:rounded-full
                                     [&::-webkit-scrollbar-thumb]:bg-gray-300
                                     dark:[&::-webkit-scrollbar-track]:bg-green-900
                                     dark:[&::-webkit-scrollbar-thumb]:bg-green-600">
-                        <div class="mt-3 grid grid-cols-4 gap-4 ">
+                        <div class="mt-3 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
                             <?php
                             // Fetch all product details
                             $stmt = $conn->prepare("SELECT * FROM products");
@@ -55,10 +66,8 @@ if (!isset($_SESSION['LoggedStudent'])) {
                                 <div
                                     class="w-full p-4 bg-white border-2 border-blue-400 rounded-lg shadow-lg sm:p-8 dark:bg-gray-700 dark:border-green-400">
                                     <form method="GET" action="checkout.php">
-                                        <input type='hidden' name='product_uuid'
-                                            value='<?php echo htmlspecialchars($product['uuid']); ?>' />
-                                        <input type='hidden' name='product_cost'
-                                            value='<?php echo htmlspecialchars($product['cost']); ?>' />
+                                        <input type='hidden' name='product_uuid' value='<?php echo htmlspecialchars($product['uuid']); ?>' />
+                                        <input type=' hidden' name='product_cost' value='<?php echo htmlspecialchars($product['cost']); ?>' />
 
                                         <h5 class="mb-4 text-sm text-center rounded-full font-medium dark:text-green-600">
                                             <?php echo htmlspecialchars($product['name']); ?>

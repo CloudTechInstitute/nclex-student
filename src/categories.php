@@ -16,17 +16,31 @@ if (!isset($_SESSION['LoggedStudent'])) {
 ?>
 
 <body class="dark:bg-gray-800 dark:text-white bg-gray-200">
-    <div class=" flex h-screen">
+    <!-- Mobile Sidebar Toggle Button -->
+    <header
+        class="p-4 bg-gray-900 text-white flex items-center justify-between lg:hidden fixed top-0 left-0 right-0 z-50">
+        <button onclick="toggleSidebar()" class="text-white">
+            <!-- Hamburger Icon -->
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+        <span class="font-semibold text-lg">Global Nclex</span>
+
+    </header>
+
+
+    <div class=" flex h-screen  mt-12 lg:mt-0">
         <!-- Sidebar -->
         <?php include 'components/sidebar.php' ?>
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col px-6 ">
+        <div class="flex-1 flex flex-col px-6">
             <!-- Content Area -->
             <div class="py-10 flex justify-between items-end">
                 <p class="uppercase font-bold text-xl text-blue-600 dark:text-green-600">lesson area</p>
             </div>
-            <div class="mb-4 flex items-center gap-4">
-                <div class="w-full">What category are we learning today?</div>
+            <div class="mb-4 md:flex items-center gap-4">
+                <div class="w-full text-xs md:text-base mb-3 md:mb-0">What category are we learning today?</div>
                 <div class="w-full">
                     <form class="max-w-md mx-auto" method="post">
                         <div class="relative">
@@ -62,5 +76,6 @@ if (!isset($_SESSION['LoggedStudent'])) {
     <script type="text/javascript" src="backend/js-functions.js"></script>
     <script type="text/javascript" src="backend/fetchEmployees.js"></script> -->
     <script type="text/javascript" src="backend/js/dashboardCards.js"></script>
+
 
     <?php include 'footer.php'; ?>

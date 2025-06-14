@@ -27,22 +27,29 @@ if ($result && $result->num_rows > 0) {
 ?>
 
 <body class="dark:bg-gray-800 bg-gray-200 dark:text-white">
+    <header class="p-4 bg-gray-900 text-white flex items-center justify-between lg:hidden">
+        <button onclick="toggleSidebar()" class="text-white">
+            <!-- Hamburger Icon -->
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+        <span class="font-semibold text-lg">Global Nclex</span>
+
+    </header>
     <div class=" flex h-screen">
         <!-- Sidebar -->
         <?php include 'components/sidebar.php' ?>
         <!-- Main Content -->
         <div class="flex-1 flex flex-col px-6 ">
             <!-- Content Area -->
-            <div class="py-4 flex justify-between items-end mb-10">
+            <div class="py-4 flex justify-between items-end mb-4">
                 <p class="uppercase text-blue-600 dark:text-green-600 font-bold text-xl">assessments</p>
 
             </div>
-            <div class="mb-4 flex items-center gap-4">
-                <div class="w-full">Select or search for any assessment to start</div>
-            </div>
 
             <div class="overflow-y-auto mt-4">
-                <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                     <a href="speed-test.php">
                         <div
                             class="w-full max-w-sm bg-white border border-gray-300 rounded-lg shadow-sm dark:bg-green-600 dark:border-green-400">

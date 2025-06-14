@@ -157,11 +157,11 @@ function displayQuestion(index) {
     solutionBox.appendChild(solutionCard);
     submitBtn.disabled = true;
     submitBtn.classList.add("bg-gray-400", "cursor-not-allowed");
-    submitBtn.classList.remove("bg-blue-500", "hover:bg-blue-600");
+    submitBtn.classList.remove("bg-blue-900", "hover:bg-blue-800");
   } else {
     submitBtn.disabled = false;
     submitBtn.classList.remove("bg-gray-400", "cursor-not-allowed");
-    submitBtn.classList.add("bg-blue-500", "hover:bg-blue-600");
+    submitBtn.classList.add("bg-blue-900", "hover:bg-blue-800");
   }
 }
 
@@ -343,7 +343,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchQuestions();
     const btn = document.getElementById("generateBtn");
     btn.disabled = true;
-    btn.textContent = "Assessment test in progress...";
+    btn.textContent = "Test started...";
   });
 
   document.getElementById("nextBtn").addEventListener("click", nextQuestion);

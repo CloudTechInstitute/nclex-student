@@ -96,7 +96,8 @@ function displayNotes(notes) {
     // card.href = `expand.php?uuid=${note.uuid}`;
 
     card.innerHTML = `
-        <p class="font-normal text-black dark:text-white">${note.notes}</p>
+        <p class="font-normal text-black dark:text-white mb-2">${note.notes}</p>
+        <hr class="h-[1px] bg-gray-600 border-0 my-2" />
       `;
 
     notesDiv.appendChild(card);

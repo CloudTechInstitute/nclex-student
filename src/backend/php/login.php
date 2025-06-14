@@ -24,6 +24,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if (password_verify($password, $user['password'])) {
 
+            if (!isset($user['status']) || strtolower($user['status']) !== 'active') {
+                http_response_code(403); // Forbidden
+                echo json_encode(['status' => 'error', 'message' => 'Email not verified. Please verify your email']);
+                $conn->close();
+                exit;
+            }
             function getUserIP()
             {
                 if (!empty($_SERVER['HTTP_CLIENT_IP'])) {

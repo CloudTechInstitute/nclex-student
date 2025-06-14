@@ -41,18 +41,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
 
         // 2. Check if questions already assigned
-        $checkAssigned = $conn->prepare("SELECT COUNT(*) as total FROM quiz_questions WHERE quiz_uuid = ? AND user_id = ?");
+        $checkAssigned = $conn->prepare("SELECT question_ids FROM quiz_questions WHERE quiz_uuid = ? AND user_id = ?");
         $checkAssigned->bind_param("ss", $uuid, $userId);
         $checkAssigned->execute();
-        $assignedCount = $checkAssigned->get_result()->fetch_assoc()['total'];
+        $assignedResult = $checkAssigned->get_result();
+        $questionIdsString = null;
 
-        if ($assignedCount == 0) {
-            // Assign all matching questions (no pool, no limit)
+        if ($assignedResult->num_rows === 0) {
+            // Assign questions
             $categories = array_map('trim', explode(',', $quizInfo['topics']));
             $placeholders = implode(',', array_fill(0, count($categories), '?'));
             $types = str_repeat('s', count($categories));
 
-            // Fetch all matching questions
             $questionQuery = "SELECT question_uuid FROM questions WHERE category IN ($placeholders) ORDER BY RAND()";
             $stmtQ = $conn->prepare($questionQuery);
             $stmtQ->bind_param($types, ...$categories);
@@ -64,66 +64,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $questionUuids[] = $row['question_uuid'];
             }
 
-            if (count($questionUuids) === 0) {
+            if (empty($questionUuids)) {
                 set_status(404);
-                echo json_encode(['status' => 'error', 'message' => 'No matching questions found for quiz topics']);
+                echo json_encode(['status' => 'error', 'message' => 'No matching questions found']);
                 exit;
             }
 
-            // Store all selected questions
-            $insertStmt = $conn->prepare("INSERT IGNORE INTO quiz_questions (quiz_uuid, question_uuid, user_id, question_order) VALUES (?, ?, ?, ?)");
-            $order = 1;
-            foreach ($questionUuids as $questionId) {
-                $insertStmt->bind_param("sssi", $uuid, $questionId, $userId, $order);
-                $insertStmt->execute();
-                $order++;
+            $questionIdsString = implode(',', $questionUuids);
+
+            $insert = $conn->prepare("INSERT INTO quiz_questions (quiz_uuid, user_id, question_ids) VALUES (?, ?, ?)");
+            $insert->bind_param("sss", $uuid, $userId, $questionIdsString);
+            if (!$insert->execute()) {
+                set_status(500);
+                echo json_encode(['status' => 'error', 'message' => 'Failed to assign questions']);
+                exit;
             }
-            $insertStmt->close();
+            $insert->close();
+        } else {
+            $questionIdsString = $assignedResult->fetch_assoc()['question_ids'];
         }
 
-        // 3. Fetch questions assigned to this quiz attempt
-        $stmt = $conn->prepare("
-            SELECT q.question_uuid, q.question, q.options, q.type, q.mark_allocated, q.solution, q.answer
-            FROM quiz_questions qq
-            INNER JOIN questions q ON qq.question_uuid = q.question_uuid
-            WHERE qq.quiz_uuid = ? AND qq.user_id = ?
-            ORDER BY qq.question_order
-        ");
-        $stmt->bind_param("ss", $uuid, $userId);
+        // 3. Fetch and return questions
+        $questionUuids = explode(',', $questionIdsString);
+        $placeholders = implode(',', array_fill(0, count($questionUuids), '?'));
+        $types = str_repeat('s', count($questionUuids));
+
+        $query = "
+            SELECT question_uuid, question, options, type, mark_allocated, solution, answer
+            FROM questions
+            WHERE question_uuid IN ($placeholders)
+        ";
+
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param($types, ...$questionUuids);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows > 0) {
-            $questions = [];
+        $questions = [];
+        while ($row = $result->fetch_assoc()) {
+            $questionUuid = $row['question_uuid'];
 
-            while ($row = $result->fetch_assoc()) {
-                $questionUuid = $row['question_uuid'];
+            // Attempted status
+            $attemptStmt = $conn->prepare("SELECT selected_option FROM attempted_quiz WHERE user_id = ? AND question_id = ? AND quiz_id = ?");
+            $attemptStmt->bind_param("sss", $userId, $questionUuid, $uuid);
+            $attemptStmt->execute();
+            $attemptResult = $attemptStmt->get_result();
 
-                // Check attempt status
-                $stmt2 = $conn->prepare("SELECT selected_option FROM attempted_quiz WHERE user_id = ? AND question_id = ? AND quiz_id = ?");
-                $stmt2->bind_param("sss", $userId, $questionUuid, $uuid);
-                $stmt2->execute();
-                $attemptResult = $stmt2->get_result();
-
-                if ($attemptResult->num_rows > 0) {
-                    $attemptData = $attemptResult->fetch_assoc();
-                    $row['attempted'] = true;
-                    $row['selected_option'] = $attemptData['selected_option'];
-                } else {
-                    $row['attempted'] = false;
-                    unset($row['solution'], $row['selected_option'], $row['answer']);
-                }
-
-                $questions[] = $row;
-                $stmt2->close();
+            if ($attemptResult->num_rows > 0) {
+                $row['attempted'] = true;
+                $row['selected_option'] = $attemptResult->fetch_assoc()['selected_option'];
+            } else {
+                $row['attempted'] = false;
+                unset($row['solution'], $row['selected_option'], $row['answer']);
             }
 
-            set_status(200);
-            echo json_encode(['status' => 'success', 'data' => $questions, 'questions_count' => count($questions)]);
-        } else {
-            set_status(404);
-            echo json_encode(['status' => 'error', 'message' => 'No questions assigned for this quiz']);
+            $questions[$questionUuid] = $row;
+            $attemptStmt->close();
         }
+
+        // Order questions as per original UUID order
+        $orderedQuestions = [];
+        foreach ($questionUuids as $qid) {
+            if (isset($questions[$qid])) {
+                $orderedQuestions[] = $questions[$qid];
+            }
+        }
+
+        set_status(200);
+        echo json_encode(['status' => 'success', 'data' => $orderedQuestions, 'questions_count' => count($orderedQuestions)]);
 
         $stmt->close();
         $checkQuiz->close();
@@ -137,4 +145,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     set_status(405);
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
-?>

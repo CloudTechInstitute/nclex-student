@@ -58,8 +58,6 @@ function displayDashboardStats({
   tutorialCount,
   tutorialCompleted = 0,
 }) {
-  const quizzesAllowed = 10;
-
   // Calculate days left
   let daysLeft = "N/A";
   if (dateSubscribed !== "N/A" && dateExpired !== "N/A") {
@@ -76,11 +74,11 @@ function displayDashboardStats({
     <div class="flex gap-4 mt-2">
         <div class="text-center">
             <p class="text-sm">Package</p>
-            <h5 class="mb-2 text-xl font-semibold tracking-tight">${product}</h5>
+            <h5 class="mb-2 md:text-xl font-semibold tracking-tight">${product}</h5>
         </div>
         <div class="text-center">
             <p class="text-sm">Days Left</p>
-            <h5 class="mb-2 text-3xl font-semibold tracking-tight">${daysLeft}</h5>
+            <h5 class="mb-2 text-lg md:text-3xl font-semibold tracking-tight">${daysLeft}</h5>
         </div>
     </div>
   `;
@@ -91,16 +89,16 @@ function displayDashboardStats({
     <div class="flex gap-4 mt-2 justify-between">
         <div class="text-center">
             <p class="text-sm">Total</p>
-            <h5 class="mb-2 text-3xl font-semibold tracking-tight">${quizzesAllowed}</h5>
+            <h5 class="mb-2 text-lg md:text-3xl font-semibold tracking-tight">${quizCount}</h5>
         </div>
         <div class="text-center">
             <p class="text-sm">Taken</p>
-            <h5 class="mb-2 text-3xl font-semibold tracking-tight">${quizCompleted}</h5>
+            <h5 class="mb-2 text-lg md:text-3xl font-semibold tracking-tight">${quizCompleted}</h5>
         </div>
         <div class="text-center">
             <p class="text-sm">Remaining</p>
-            <h5 class="mb-2 text-3xl font-semibold tracking-tight">${
-              quizzesAllowed - quizCompleted
+            <h5 class="mb-2 text-lg md:text-3xl font-semibold tracking-tight">${
+              quizCount - quizCompleted
             }</h5>
         </div>
     </div>
@@ -112,15 +110,15 @@ function displayDashboardStats({
     <div class="flex gap-4 mt-2 justify-between">
         <div class="text-center">
             <p class="text-sm">Total</p>
-            <h5 class="mb-2 text-3xl font-semibold tracking-tight">${mockCount}</h5>
+            <h5 class="mb-2 text-lg md:text-3xl font-semibold tracking-tight">${mockCount}</h5>
         </div>
         <div class="text-center">
             <p class="text-sm">Taken</p>
-            <h5 class="mb-2 text-3xl font-semibold tracking-tight">${mockCompleted}</h5>
+            <h5 class="mb-2 text-lg md:text-3xl font-semibold tracking-tight">${mockCompleted}</h5>
         </div>
         <div class="text-center">
             <p class="text-sm">Remaining</p>
-            <h5 class="mb-2 text-3xl font-semibold tracking-tight">${
+            <h5 class="mb-2 text-lg md:text-3xl font-semibold tracking-tight">${
               mockCount - mockCompleted
             }</h5>
         </div>
@@ -133,15 +131,15 @@ function displayDashboardStats({
     <div class="flex gap-4 mt-2 justify-between">
         <div class="text-center">
             <p class="text-sm">Total</p>
-            <h5 class="mb-2 text-3xl font-semibold tracking-tight">${tutorialCount}</h5>
+            <h5 class="mb-2 text-lg md:text-3xl font-semibold tracking-tight">${tutorialCount}</h5>
         </div>
         <div class="text-center">
             <p class="text-sm">Completed</p>
-            <h5 class="mb-2 text-3xl font-semibold tracking-tight">${tutorialCompleted}</h5>
+            <h5 class="mb-2 text-lg md:text-3xl font-semibold tracking-tight">${tutorialCompleted}</h5>
         </div>
         <div class="text-center">
             <p class="text-sm">Remaining</p>
-            <h5 class="mb-2 text-3xl font-semibold tracking-tight">${
+            <h5 class="mb-2 text-lg md:text-3xl font-semibold tracking-tight">${
               tutorialCount - tutorialCompleted
             }</h5>
         </div>
@@ -153,8 +151,8 @@ function displayDashboardStats({
 function showSkeleton(card) {
   card.innerHTML = `
     <div video="status" class="max-w-sm animate-pulse">
-        <div class="h-3 bg-gray-200 rounded-md dark:bg-gray-700 w-24 mb-2"></div>
-        <div class="h-8 bg-gray-200 rounded-md dark:bg-gray-700 w-16 mb-2"></div>
+        <div class="h-3 bg-gray-200 rounded-md dark:bg-gray-800 w-24 mb-2"></div>
+        <div class="h-8 bg-gray-200 rounded-md dark:bg-gray-800 w-16 mb-2"></div>
         <span class="sr-only">Loading...</span>
     </div>`;
 }

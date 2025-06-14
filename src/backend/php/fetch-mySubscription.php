@@ -7,11 +7,6 @@ session_start();
 include 'connection.php';
 header('Content-Type: application/json');
 
-function set_status($code)
-{
-    http_response_code($code);
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!empty($_SESSION['studentID']) && !empty($_SESSION['LoggedStudent'])) {
         $userID = $conn->real_escape_string($_SESSION['studentID']);
@@ -44,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                     if ($daysLeft < 0) {
                         $row['status'] = "Expired";
-                    } elseif ($daysLeft === 4) {
+                    } elseif ($daysLeft <= 7) {
                         $mail = new PHPMailer(true);
                         try {
                             $mail->isSMTP();
@@ -60,14 +55,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                             $mail->isHTML(true);
                             $mail->Subject = 'Subscription Expiry';
+                            $subscriptionUUID = $row['product_uuid'];
+
+                            $renewLink = "http://localhost/nclex-student/src/renew-subscription.php?subscription=$subscriptionUUID";
+
                             $mail->Body = "
                                 <h2>Subscription Expiry Notice</h2>
                                 <p>Hello $fname,</p>
-                                <p>Your subscription with us has $daysLeft days left. We encourage you to renew before it expires.</p>
-                                <p>Click on this link to renew your subscription</p>
+                                <p>Your subscription with us has $daysLeft days left. We encourage you to renew before it expires. Click on this button to renew for a 50% discount.</p>
+                                <p>
+                                    <a href='$renewLink' 
+                                    style='display:inline-block;padding:12px 24px;background-color:#007bff;color:#fff;text-decoration:none;border-radius:5px;font-weight:bold;'>
+                                        Renew Subscription
+                                    </a>
+                                </p>
                                 <p>If you did not have an active subscription with us, please ignore this email.</p>
                                 <p>Kind Regards,<br>Global NCLEX Exams Center</p>
                             ";
+
                             $mail->send();
                         } catch (Exception $e) {
                             // Log error here instead of returning it
@@ -80,24 +85,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     $subscriptions[] = $row;
                 }
 
-                set_status(200);
                 echo json_encode(['status' => 'success', 'data' => $subscriptions]);
             } else {
-                set_status(404);
                 echo json_encode(['status' => 'error', 'message' => 'You do not have any subscription yet']);
             }
         } else {
-            set_status(404);
             echo json_encode(['status' => 'error', 'message' => 'Student not found']);
         }
     } else {
-        set_status(401);
         echo json_encode(['status' => 'error', 'message' => 'User not logged in or session expired']);
     }
 
     $conn->close();
 } else {
-    set_status(405);
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
 }
 ?>

@@ -123,7 +123,7 @@ function displayVideos(videos) {
     videoElement.setAttribute("oncontextmenu", "return false;");
 
     const sourceElement = document.createElement("source");
-    sourceElement.src = `videos/${video.filename}`;
+    sourceElement.src = `http://localhost/content-center-webapp/src/backend/uploads/videos/${video.filename}`;
     sourceElement.type = "video/mp4";
 
     videoElement.appendChild(sourceElement);

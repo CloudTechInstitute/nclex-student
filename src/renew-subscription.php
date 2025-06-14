@@ -15,9 +15,8 @@ $nameParts = explode(" ", $user);
 $firstname = $nameParts[0];
 $lastname = $nameParts[1];
 
-if (isset($_GET['product_uuid'])) {
-    $id = ($_GET['product_uuid']);
-
+if (isset($_GET['subscription'])) {
+    $id = ($_GET['subscription']);
 
     $stmt = $conn->prepare("SELECT * FROM products WHERE uuid = ?");
     $stmt->bind_param("s", $id);
@@ -48,35 +47,30 @@ if (isset($_GET['product_uuid'])) {
 
 
 <body class="dark:bg-gray-800 dark:text-white">
-    <header class="p-4 bg-gray-900 text-white flex items-center justify-between lg:hidden">
-        <button onclick="toggleSidebar()" class="text-white">
-            <!-- Hamburger Icon -->
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-        </button>
-        <span class="font-semibold text-lg">Global Nclex</span>
-
-    </header>
     <div class=" flex h-screen">
         <!-- Sidebar -->
         <?php include 'components/sidebar.php' ?>
         <!-- Main Content -->
         <div class="flex-1 flex flex-col px-6">
             <!-- Content Area -->
-            <div class="md:py-4 flex justify-between items-end mb-2">
+            <div class="py-4 flex justify-between items-end mb-6">
             </div>
 
 
-            <div class="">
+            <div class="[&::-webkit-scrollbar]:w-2
+                                    [&::-webkit-scrollbar-track]:rounded-full
+                                    [&::-webkit-scrollbar-track]:bg-gray-100
+                                    [&::-webkit-scrollbar-thumb]:rounded-full
+                                    [&::-webkit-scrollbar-thumb]:bg-gray-300
+                                    dark:[&::-webkit-scrollbar-track]:bg-gray-700
+                                    dark:[&::-webkit-scrollbar-thumb]:bg-gray-600 overflow-y-auto">
                 <main class="">
-                    <?php include('components/checkout-form.php'); ?>
+                    <?php include('components/renew-checkout-form.php'); ?>
                 </main>
             </div>
         </div>
     </div>
     </div>
-
 
     <script src="https://js.paystack.co/v1/inline.js"></script>
     <script type="text/javascript" src="backend/js/payment.js"></script>
